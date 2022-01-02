@@ -2,6 +2,7 @@
 // @name            扇贝单词增强
 // @name:en         Shanbay Enhance
 // @description     扇贝单词功能增强，带来更好的背单词体验。❤单词总结释义遮挡
+// @description:en  More function for Shanbay.
 // @version         0.1
 // @author          Ziu
 // @namespace       https://greasyfork.org/zh-CN/users/605474
