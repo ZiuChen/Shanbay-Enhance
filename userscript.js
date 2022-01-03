@@ -8,72 +8,97 @@
 // @namespace       https://greasyfork.org/zh-CN/users/605474
 // @icon            https://gitee.com/ziuc/utool-filebed/raw/master/20210514-231824-0795.png
 // @match           https://web.shanbay.com/wordsweb/*
+// @require         https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js
+// @grant           GM_info
 // @license         MIT
-// @grant           none
 // ==/UserScript==
 
 'use strict';
-console.log("%c[Shanbay Enhance] script loaded","color: #209e85")
+const GreasyUrl = "https://greasyfork.org/zh-CN/scripts/437942"
+const version = GM_info.script.version
 
-const styleTag = /* CSS */`
+const styleTag = /* CSS */ `
+    /* switch  */
     .switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 34px;
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 34px;
     }
 
     .switch input {display:none;}
 
     .slider {
-    position: absolute;
-    cursor: pointer;
-    height: 25px;
-    width: 45px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+        position: absolute;
+        cursor: pointer;
+        height: 25px;
+        width: 45px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
     }
 
     .slider:before {
-    position: absolute;
-    content: "";
-    height: 19px;
-    width: 19px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    -webkit-transition: .3s;
-    transition: .3s;
+        position: absolute;
+        content: "";
+        height: 19px;
+        width: 19px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .3s;
+        transition: .3s;
     }
 
     input:checked + .slider {
-    background-color: #209e85;
+        background-color: #209e85;
     }
 
     input:focus + .slider {
-    box-shadow: 0 0 1px #209e85;
+        box-shadow: 0 0 1px #209e85;
     }
 
     input:checked + .slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
+        -webkit-transform: translateX(20px);
+        -ms-transform: translateX(20px);
+        transform: translateX(20px);
     }
 
-    /* Rounded sliders */
     .slider.round {
-    border-radius: 34px;
+        border-radius: 34px;
     }
 
     .slider.round:before {
-    border-radius: 50%;
+        border-radius: 50%;
     }
-`
+
+    /* toastr position */
+    .toastr-center{
+        top: 50%;
+        left: 50%;
+        margin-top: -30px;
+        margin-left: -150px;
+    }
+`;
+
+log(`script loaded: ${version}`)
+
+function LoadUrl() {
+    const cssUrl = [
+        {
+            name: `toastr`,
+            url: `https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/toastr.min.css`
+        }
+    ]
+    cssUrl.forEach(item => {
+        $("head").append(`<link href="${item.url}" rel="stylesheet">`)
+    })
+    $("head").append(`<style>${styleTag}<style>`)
+}
 
 function Observer() {
     const OuterTargetNode = document.getElementsByClassName("Layout_main__2_zw8")[0]
@@ -101,6 +126,38 @@ function Observer() {
     };
     const OuterObserver = new MutationObserver(OuterCallback)
     OuterObserver.observe(OuterTargetNode, { childList: true })
+}
+
+function log(msg) {
+    console.log(`%c[Shanbay Enhance] ${msg}`,"color: #209e85")
+}
+
+async function CheckUpdate() {
+    if(window.location.hash !== "#/study/entry") return
+    sendRequest(GreasyUrl, (obj) => {
+        return obj.querySelectorAll('.script-show-version>span')[1].textContent
+    })
+    .then(res => {
+        let weightLastest = 0
+        let weightNow = 0
+        res.split('.').reverse().forEach((value, index) => {
+            weightLastest += (index + 1) * value
+        })
+        version.split('.').reverse().forEach((value, index) => {
+            weightNow += (index + 1) * value
+        })
+        if (weightLastest > weightNow) {
+            log("need update")
+            toastr.options = {
+                extendedTimeOut: 999999999,
+                onclick: () => { window.open(`${GreasyUrl}`) }
+            }
+            toastr.warning(`有新版本：${res}`, `Shanbay Enhance`)
+        } else {
+            log("version Checked")
+            toastr.success(`版本已是最新：${version}`, `Shanbay Enhance`)
+        }
+    })
 }
 
 function LoadConfig() {
@@ -195,8 +252,30 @@ function HideSummaryTranslation() {
     })
 }
 
+async function sendRequest(url, callBack, options) {
+    let res = await fetch(url, options)
+        .then(response => { return response.blob() })
+        .then(blob => {
+            return new Promise(resolve => {
+                let reader = new FileReader();
+                reader.onload = () => {
+                    let htmlData = reader.result;
+                    htmlData = (new window.DOMParser()).parseFromString(htmlData, "text/html");
+                    resolve(htmlData)
+                }
+                reader.readAsText(blob, 'GBK')
+            })
+        })
+        .then(response => {
+            return callBack(response)
+        })
+        .catch(error => { console.error(error) })
+    return res
+}
+
 window.onload = () => {
-    $("head").append(`<style>${styleTag}<style>`)
+    LoadUrl()
+    CheckUpdate()
     LoadConfig()
     Observer()
 }
