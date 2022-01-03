@@ -3,11 +3,12 @@
 // @name:en         Shanbay Enhance
 // @description     扇贝单词功能增强，带来更好的背单词体验。❤单词总结释义遮挡
 // @description:en  More function for Shanbay.
-// @version         0.1
+// @version         0.1.2
 // @author          Ziu
 // @namespace       https://greasyfork.org/zh-CN/users/605474
 // @icon            https://gitee.com/ziuc/utool-filebed/raw/master/20210514-231824-0795.png
 // @match           https://web.shanbay.com/wordsweb/*
+// @require         https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js
 // @require         https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js
 // @grant           GM_info
 // @license         MIT
