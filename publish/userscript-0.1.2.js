@@ -13,11 +13,11 @@
 // @grant           GM_info
 // @license         MIT
 // ==/UserScript==
-
+ 
 'use strict';
 const GreasyUrl = "https://greasyfork.org/zh-CN/scripts/437942"
 const version = GM_info.script.version
-
+ 
 const styleTag = /* CSS */ `
     /* switch  */
     .switch {
@@ -26,9 +26,9 @@ const styleTag = /* CSS */ `
         width: 50px;
         height: 34px;
     }
-
+ 
     .switch input {display:none;}
-
+ 
     .slider {
         position: absolute;
         cursor: pointer;
@@ -42,7 +42,7 @@ const styleTag = /* CSS */ `
         -webkit-transition: .4s;
         transition: .4s;
     }
-
+ 
     .slider:before {
         position: absolute;
         content: "";
@@ -54,29 +54,29 @@ const styleTag = /* CSS */ `
         -webkit-transition: .3s;
         transition: .3s;
     }
-
+ 
     input:checked + .slider {
         background-color: #209e85;
     }
-
+ 
     input:focus + .slider {
         box-shadow: 0 0 1px #209e85;
     }
-
+ 
     input:checked + .slider:before {
         -webkit-transform: translateX(20px);
         -ms-transform: translateX(20px);
         transform: translateX(20px);
     }
-
+ 
     .slider.round {
         border-radius: 34px;
     }
-
+ 
     .slider.round:before {
         border-radius: 50%;
     }
-
+ 
     /* toastr position */
     .toastr-center{
         top: 50%;
@@ -85,9 +85,9 @@ const styleTag = /* CSS */ `
         margin-left: -150px;
     }
 `;
-
+ 
 log(`script loaded: ${version}`)
-
+ 
 function LoadUrl() {
     const cssUrl = [
         {
@@ -100,7 +100,7 @@ function LoadUrl() {
     })
     $("head").append(`<style>${styleTag}<style>`)
 }
-
+ 
 function Observer() {
     const OuterTargetNode = document.getElementsByClassName("Layout_main__2_zw8")[0]
     if(typeof OuterTargetNode === "undefined") return
@@ -128,11 +128,11 @@ function Observer() {
     const OuterObserver = new MutationObserver(OuterCallback)
     OuterObserver.observe(OuterTargetNode, { childList: true })
 }
-
+ 
 function log(msg) {
     console.log(`%c[Shanbay Enhance] ${msg}`,"color: #209e85")
 }
-
+ 
 async function CheckUpdate() {
     if(window.location.hash !== "#/study/entry") return
     sendRequest(GreasyUrl, (obj) => {
@@ -160,7 +160,7 @@ async function CheckUpdate() {
         }
     })
 }
-
+ 
 function LoadConfig() {
     // Config Initialize
     const configTags = [
@@ -199,7 +199,7 @@ function LoadConfig() {
         }
     })
 }
-
+ 
 function ToggleSummaryTranslation() {
     let wordList = document.querySelectorAll(".StudySummaryItem_content__3j9YG")
     if(localStorage.getItem("config-summary") === "true") {
@@ -217,7 +217,7 @@ function ToggleSummaryTranslation() {
         })
     }
 }
-
+ 
 function HideSummaryTranslation() {
     let checked = ""
     if(localStorage.getItem("config-summary") === "true") checked = "checked" // Key-value is not Boolean but String
@@ -252,7 +252,7 @@ function HideSummaryTranslation() {
         ToggleSummaryTranslation()
     })
 }
-
+ 
 async function sendRequest(url, callBack, options) {
     let res = await fetch(url, options)
         .then(response => { return response.blob() })
@@ -273,11 +273,10 @@ async function sendRequest(url, callBack, options) {
         .catch(error => { console.error(error) })
     return res
 }
-
+ 
 window.onload = () => {
     LoadUrl()
     CheckUpdate()
     LoadConfig()
     Observer()
 }
-
