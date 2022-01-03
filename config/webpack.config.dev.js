@@ -1,4 +1,3 @@
-const path = require('path')
 const { merge } = require('webpack-merge')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const UserScriptMetaDataPlugin = require('userscript-metadata-webpack-plugin')
@@ -14,7 +13,7 @@ metadata.require.push(
 const cfg = merge(webpackConfig, {
     entry: {
         debug: webpackConfig.entry,
-        dev: path.resolve(__dirname, './empty.js') // Generate index.dev.user.js
+        dev: path.resolve(__dirname, './dev.js') // Generate index.dev.user.js
     },
     output: {
         filename: 'index.[name].user.js',

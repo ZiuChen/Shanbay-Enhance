@@ -15,11 +15,10 @@ function Observer() {
             loadConfig()
         } else return
     }
-    const InnerCallback = () => {
+    const InnerCallback = (mutations) => {
         executeInnerFunction()
     }
-    const OuterCallback = (mutationsList) => {
-        console.log(mutationsList)
+    const OuterCallback = (mutations) => {
         executeOuterFunction()
         const InnerTargetNode = document.getElementsByClassName("StudyPage_studyPage__1Ri5C")[0]
         if(typeof InnerTargetNode === "undefined") return

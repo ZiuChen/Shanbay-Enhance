@@ -7,7 +7,7 @@ function loadConfig() {
             default: true
         },
         {
-            content: "自动检查更新：",
+            content: "检查更新提示：",
             id: "config-update",
             default: true
         }
