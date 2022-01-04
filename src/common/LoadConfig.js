@@ -1,4 +1,4 @@
-import configs from "./config"
+import configs from "./Config"
 
 function loadConfig() {
     // Config Initialize

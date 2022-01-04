@@ -1,5 +1,12 @@
 const config = [
     {
+        content: "深色模式：",
+        id: "config-darkmode",
+        default: false,
+        type: "show",
+        name: "choice"
+    },
+    {
         content: "单词总结释义遮挡：",
         id: "config-summary",
         default: true,

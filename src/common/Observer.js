@@ -3,6 +3,7 @@ import SummaryTranslation from "../function/SummaryTranslation"
 import fontToggle from "../function/FontToggle"
 import noteRemove from "../function/NoteRemove"
 import hideTranslation from "../function/HideTranslation"
+import toggleDarkMode from "../function/ToggleDarkMode"
 
 const fontToggle_conditions = ["study-page", "index_hint", "StudyPage_nextBtn", "StudySummary"]
 
@@ -35,6 +36,7 @@ function Observer() {
             noteRemove()
             hideTranslation()
         }
+        toggleDarkMode()
     }
     const OuterObserver = new MutationObserver(OuterCallback)
     OuterObserver.observe(OuterTargetNode, { childList: true, subtree: true })

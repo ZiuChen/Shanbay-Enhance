@@ -1,4 +1,4 @@
-import style from "./style";
+import style from "../style/CommonStyle";
 
 function LoadUrl() {
     const cssUrl = [
