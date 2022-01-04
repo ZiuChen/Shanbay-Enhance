@@ -58,12 +58,24 @@ input:checked + .slider:before {
 }
 
 /* toastr position */
-.toastr-center{
+.toastr-center {
     top: 50%;
     left: 50%;
     margin-top: -30px;
     margin-left: -150px;
 }
+
+/* config input text */
+#config-fonts-choice-tmp {
+    width: 220px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    height: 30px;
+    margin-top: 4px;
+    line-height: 30px;
+}
+
 `;
 
 export default style

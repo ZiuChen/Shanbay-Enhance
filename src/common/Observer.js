@@ -9,13 +9,15 @@ function Observer() {
     if(typeof OuterTargetNode === "undefined") return
     const OuterCallback = (mutations) => {
         mutations.forEach(mutation => {
-            if(mutation.addedNodes.length === 0) return
-            if(mutation.addedNodes[0].className === undefined) return
+            if(mutation.addedNodes.length === 0
+            || mutation.addedNodes[0].className === undefined) return
             let currentState = mutation.addedNodes[0].className
-            console.log(currentState);
             if(currentState.indexOf("SettingContainer_setting") !== -1) loadConfig()
             fontToggle_conditions.forEach(condition => {
                 if(currentState.indexOf(condition) !== -1) fontToggle()
+                if(mutation.addedNodes[0].childNodes.length === 0
+                || mutation.addedNodes[0].childNodes[0].className === undefined) return
+                if(mutation.addedNodes[0].childNodes[0].className.indexOf("wordBox") !== -1) fontToggle()
             })
             if(currentState.indexOf("StudySummary") !== -1) SummaryTranslation.hideSummaryTranslation()
         })

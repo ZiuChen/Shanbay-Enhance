@@ -22,21 +22,22 @@ function loadConfig() {
             }
             if(item.name === "choice-question") {
                 options += `<span class="SettingContainer_title__1IBOy">${item.content}`
-                options += `<span class="SettingContainer_questionWrap__1nE7J">?<span class="SettingContainer_question__VM3MF">开启后，单词、释义、例句的字体将会被修改</span></span>`
+                options += `<span class="SettingContainer_questionWrap__1nE7J">?<span class="SettingContainer_question__VM3MF">${item.info}</span></span>`
                 options += `</span>`
                 options += `<input type="checkbox" id="${item.id}" ${checked}>`
             }
             if(item.name === "select") {
-                console.log("select");
                 options += `<span class="SettingContainer_title__1IBOy">${item.content}</span>`
                 options += `<select id="${item.id}">`
                 configs.fonts.forEach((font, index) => {
-                    if(font === "") return
                     let selected = ""
                     if(localStorage.getItem("config-fonts-choice") === font) selected = "selected"
                     options += `<option value="${index}" ${selected}>${font}</option>`
                 })
                 options += `</select>`
+                if(item.id === "config-fonts-choice") {
+                    options += `<input type="text" id="config-fonts-choice-tmp" placeholder="自定义字体">`
+                }
             }
             return options
         }
@@ -45,13 +46,16 @@ function loadConfig() {
             <div class="SettingContainer_item__3RKJY">
                 ${ getFonts() }
             </div>`)
-        if(localStorage.getItem("config-fonts") === "false") $("#config-fonts-choice").parent().hide()
     })
+    if(localStorage.getItem("config-fonts") === "false") $("#config-fonts-choice").parent().hide()
+    if($("#config-fonts-choice")[0].options.selectedIndex === 0) $("#config-fonts-choice-tmp").val(localStorage.getItem("config-fonts-choice"))
     $(".scriptSettings").change(e => {
-        console.log(e);
         localStorage.setItem(e.target.id, e.target.checked)
         if(e.target.id === "config-fonts-choice") {
-            localStorage.setItem(e.target.id, configs.fonts[e.target.options.selectedIndex + 1])
+            localStorage.setItem(e.target.id, configs.fonts[e.target.options.selectedIndex])
+        }
+        if(e.target.id === "config-fonts-choice-tmp") {
+            localStorage.setItem("config-fonts-choice", e.target.value)
         }
         if(e.target.id === "config-fonts"
         && localStorage.getItem("config-fonts") === "false") {
@@ -61,6 +65,7 @@ function loadConfig() {
         && localStorage.getItem("config-fonts") === "true") {
             $("#config-fonts-choice").parent().show()
         }
+        toastr.success("设置已更新", "Shanbay Enhance")
     })
 }
 export default loadConfig

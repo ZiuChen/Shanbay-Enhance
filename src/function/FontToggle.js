@@ -34,7 +34,6 @@ const selectors = [
 ]
 
 function fontToggle() {
-    console.log("fontToggle");
     if(localStorage.getItem("config-fonts") === "false") return
     selectors.forEach(item => {
         $(item.selector).css("font-family", localStorage.getItem("config-fonts-choice"))
