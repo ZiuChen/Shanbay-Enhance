@@ -9,7 +9,6 @@ function loadConfig() {
     // Update Setting List
     $(".SettingContainer_item__3RKJY").wrapAll(`<div class="defaultSettings"></div>`)
     $(".SettingContainer_setting__2aBZV").append(`<div class="scriptSettings"></div>`)
-    $(".SettingContainer_setting__2aBZV").css("overflow", "auto")
     configs.config.forEach(item => {
         function getFonts() {
             let options = ""
@@ -27,7 +26,8 @@ function loadConfig() {
                 options += `<input type="checkbox" id="${item.id}" ${checked}>`
             }
             if(item.name === "select") {
-                options += `<span class="SettingContainer_title__1IBOy">${item.content}</span>`
+                options += `<span class="SettingContainer_title__1IBOy">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${item.content}</span>`
                 options += `<select id="${item.id}">`
                 configs.fonts.forEach((font, index) => {
                     let selected = ""
@@ -39,6 +39,15 @@ function loadConfig() {
                     options += `<input type="text" id="config-fonts-choice-tmp" placeholder="自定义字体">`
                 }
             }
+            if(item.name === "radio") {
+                options += `<span class="SettingContainer_title__1IBOy">${item.content}</span>`
+                options += `<div>`
+                configs.exampleHideType.forEach((type, index) => {
+                    let checked = ""
+                    if(localStorage.getItem("config-example-hide") === type) checked = "checked"
+                    options += `<label><input type="radio" name="config-example-hide" value="${type}" ${checked}>${type}</label>`
+                })
+            }
             return options
         }
         if(item.type === "unshow") return
@@ -47,6 +56,9 @@ function loadConfig() {
                 ${ getFonts() }
             </div>`)
     })
+    $(".SettingContainer_setting__2aBZV").css("overflow", "auto")
+    $(".SettingContainer_setting__2aBZV").css("height", "660px")
+    // $(".scriptSettings .SettingContainer_title__1IBOy").css("font-weight", "bold")
     if(localStorage.getItem("config-fonts") === "false") $("#config-fonts-choice").parent().hide()
     if($("#config-fonts-choice")[0].options.selectedIndex === 0) $("#config-fonts-choice-tmp").val(localStorage.getItem("config-fonts-choice"))
     $(".scriptSettings").change(e => {
@@ -65,6 +77,10 @@ function loadConfig() {
         && localStorage.getItem("config-fonts") === "true") {
             $("#config-fonts-choice").parent().show()
         }
+        if(e.target.name === "config-example-hide") {
+            localStorage.setItem("config-example-hide", e.target.defaultValue)
+        }
+        toastr.options = { timeOut: 1000 }
         toastr.success("设置已更新", "Shanbay Enhance")
     })
 }

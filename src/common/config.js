@@ -22,6 +22,20 @@ const config = [
         name: "select"
     },
     {
+        content: "例句翻译隐藏：",
+        id: "config-example-hide",
+        default: "隐藏并占位",
+        type: "show",
+        name: "radio"
+    },
+    {
+        content: "移除笔记栏：",
+        id: "config-note-remove",
+        default: true,
+        type: "show",
+        name: "choice"
+    },
+    {
         content: "检查更新提示：",
         id: "config-update",
         default: true,
@@ -30,8 +44,10 @@ const config = [
     }
 ]
 const fonts = ["", "宋体", "华文中宋", "思源宋体 CN", "微软雅黑", "等线", "仿宋"]
+const exampleHideType = ["隐藏并占位", "隐藏并移除", "不隐藏"]
 
 export default {
     config: config,
-    fonts: fonts
+    fonts: fonts,
+    exampleHideType: exampleHideType
 }

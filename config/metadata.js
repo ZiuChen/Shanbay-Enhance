@@ -3,7 +3,7 @@ const { author, repository, version } = require('../package.json')
 module.exports = {
     "name": "扇贝单词增强",
     "name:en": "Shanbay Enhance",
-    "description": "扇贝单词功能增强，带来更好的背单词体验。❤单词总结释义遮挡",
+    "description": "扇贝单词功能增强，带来更好的背单词体验。❤单词总结释义遮挡❤隐藏例句翻译❤自定义单词例句字体",
     "description:en": "More function for Shanbay.",
     "version": version,
     "author": author,

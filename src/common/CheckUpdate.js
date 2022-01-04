@@ -28,6 +28,7 @@ async function CheckUpdate() {
         } else {
             log("version Checked")
             if(localStorage.getItem("config-update") !== "true") return
+            toastr.options = { timeOut: 1000 }
             toastr.success(`版本已是最新：${version}`, `Shanbay Enhance`)
         }
     })
