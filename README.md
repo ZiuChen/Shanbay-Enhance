@@ -1,10 +1,22 @@
 # Shanbay-Enhance
-非破坏性地引入新功能，有针对性的对扇贝单词网页版的操作进行优化，带来更好的背单词体验。
 
-### ⚙已经添加的功能：
+扇贝单词功能增强，带来更好的背单词体验。
 
-* ❤ 单词总结释义遮挡（功能与手机端相同）
+## :sparkles: 已添加功能
 
-![img](https://gitee.com/ziuc/resources/raw/master/Shanbay-Enhance/16411331139741%20-%20%E5%8D%95%E8%AF%8D%E9%A1%B5%E6%95%88%E6%9E%9C.jpg)
+* :heart: 单词总结释义遮挡（功能与手机端相同）
+* :heart: 隐藏例句翻译
+* :heart: 自定义单词/例句字体
+* :heart: 移除笔记栏
+* :heart: 未来将添加更多功能 ··· ···
 
-点击访问脚本发布页：[*Greasy Fork*](https://greasyfork.org/zh-CN/scripts/437942)
+## :camera_flash: 效果演示
+
+<img alt="单词页效果" width="95%" src="https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance/images/content-page.jpg">
+<img alt="小结页效果" width="95%" src="https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance/images/summary-page.jpg">
+<img alt="设置页效果" width="95%" src="https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance/images/config-page.jpg">
+## :paperclip: 相关链接
+
+脚本发布页：[*Greasy Fork*](https://greasyfork.org/zh-CN/scripts/437942)
+
+源代码：[*Github*](https://github.com/ZiuChen/Shanbay-Enhance)
