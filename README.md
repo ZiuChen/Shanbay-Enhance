@@ -20,3 +20,5 @@
 脚本发布页：[*Greasy Fork*](https://greasyfork.org/zh-CN/scripts/437942)
 
 源代码：[*Github*](https://github.com/ZiuChen/Shanbay-Enhance)
+
+捐赠链接：[*Donation*](https://gitee.com/ziuc/utool-filebed/raw/master/Buy%20me%20a%20coffee.png)
