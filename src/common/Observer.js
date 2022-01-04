@@ -22,10 +22,10 @@ function Observer() {
             if(currentState.indexOf("StudySummary") !== -1) SummaryTranslation.hideSummaryTranslation()
             fontToggle_conditions.forEach(condition => {
                 if(currentState.indexOf(condition) !== -1) fontToggle()
-                if(mutation.addedNodes[0].childNodes.length === 0
-                || mutation.addedNodes[0].childNodes[0].className === undefined) return
-                if(mutation.addedNodes[0].childNodes[0].className.indexOf("wordBox") !== -1) fontToggle()
             })
+            if(mutation.addedNodes[0].childNodes.length === 0
+                || mutation.addedNodes[0].childNodes[0].className === undefined) return
+            if(mutation.addedNodes[0].childNodes[0].className.indexOf("wordBox") !== -1) fontToggle()
         })
     };
     const ExecuteFunctions = () => {
