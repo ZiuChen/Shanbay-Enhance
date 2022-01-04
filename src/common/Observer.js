@@ -1,32 +1,28 @@
 import loadConfig from "./LoadConfig"
 import SummaryTranslation from "../function/SummaryTranslation"
+import fontToggle from "../function/FontToggle"
+
+const fontToggle_conditions = ["study-page", "index_hint", "StudyPage_nextBtn", "StudySummary"]
 
 function Observer() {
     const OuterTargetNode = document.getElementsByClassName("Layout_main__2_zw8")[0]
     if(typeof OuterTargetNode === "undefined") return
-    const executeInnerFunction = () => {
-        if(document.getElementsByClassName("StudySummary_studySummary__32y_I").length === 1
-            && document.getElementsByClassName("switch").length !== 1) {
-                SummaryTranslation.hideSummaryTranslation()
-        } else return
-    }
-    const executeOuterFunction = () => {
-        if(document.getElementsByClassName("SettingContainer_setting__2aBZV").length === 1) {
-            loadConfig()
-        } else return
-    }
-    const InnerCallback = (mutations) => {
-        executeInnerFunction()
-    }
     const OuterCallback = (mutations) => {
-        executeOuterFunction()
-        const InnerTargetNode = document.getElementsByClassName("StudyPage_studyPage__1Ri5C")[0]
-        if(typeof InnerTargetNode === "undefined") return
-        const InnerObserver = new MutationObserver(InnerCallback)
-        InnerObserver.observe(InnerTargetNode, { childList: true, subtree: true })
+        mutations.forEach(mutation => {
+            if(mutation.addedNodes.length === 0) return
+            if(mutation.addedNodes[0].className === undefined) return
+            let currentState = mutation.addedNodes[0].className
+            console.log(currentState);
+            if(currentState.indexOf("SettingContainer_setting") !== -1) loadConfig()
+            fontToggle_conditions.forEach(condition => {
+                if(currentState.indexOf(condition) !== -1) fontToggle()
+            })
+            if(currentState.indexOf("StudySummary") !== -1) SummaryTranslation.hideSummaryTranslation()
+        })
+
     };
     const OuterObserver = new MutationObserver(OuterCallback)
-    OuterObserver.observe(OuterTargetNode, { childList: true })
+    OuterObserver.observe(OuterTargetNode, { childList: true, subtree: true })
 }
 
 export default Observer
