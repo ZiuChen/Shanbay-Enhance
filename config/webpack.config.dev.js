@@ -1,3 +1,4 @@
+const path = require('path')
 const { merge } = require('webpack-merge')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const UserScriptMetaDataPlugin = require('userscript-metadata-webpack-plugin')

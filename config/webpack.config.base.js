@@ -12,7 +12,6 @@ const webpackConfig = {
     output: {
         path: path.resolve(__dirname, '../dist')
     },
-    // target: 'web',
     module: {
         rules: [{
                 use: {

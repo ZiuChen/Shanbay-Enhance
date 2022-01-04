@@ -10,7 +10,10 @@ module.exports = {
     "namespace": 'https://greasyfork.org/zh-CN/users/605474',
     "icon": "https://gitee.com/ziuc/utool-filebed/raw/master/20210514-231824-0795.png",
     "source": repository.url,
-    "match": "https://web.shanbay.com/wordsweb/*",
+    "match": [
+        "https://www.shanbay.com/*",
+        "https://web.shanbay.com/wordsweb/*"
+    ],
     require: [
         "https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js",
         "https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js"
