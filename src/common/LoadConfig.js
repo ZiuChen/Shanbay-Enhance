@@ -69,6 +69,9 @@ function loadConfig() {
         if(e.target.id === "config-fonts-choice-tmp") {
             localStorage.setItem("config-fonts-choice", e.target.value)
         }
+        if(e.target.id === "config-darkmode") {
+            window.location.reload()
+        }
         if(e.target.id === "config-fonts"
         && localStorage.getItem("config-fonts") === "false") {
             $("#config-fonts-choice").parent().hide()

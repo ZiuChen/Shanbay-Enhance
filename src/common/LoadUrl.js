@@ -1,4 +1,4 @@
-import style from "../style/CommonStyle";
+import commonStyle from "../style/CommonStyle";
 
 function LoadUrl() {
     const cssUrl = [
@@ -10,7 +10,7 @@ function LoadUrl() {
     cssUrl.forEach(item => {
         $("head").append(`<link href="${item.url}" rel="stylesheet">`)
     })
-    $("head").append(`<style>${style}<style>`)
+    $("head").append(`<style>${commonStyle}<style>`)
 }
 
 export default LoadUrl
