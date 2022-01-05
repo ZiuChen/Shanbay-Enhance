@@ -1,3 +1,5 @@
+import focusMode from "../function/FocusMode"
+import toggleDarkMode from "../function/ToggleDarkMode"
 import configs from "./Config"
 
 function loadConfig() {
@@ -68,9 +70,16 @@ function loadConfig() {
         }
         if(e.target.id === "config-fonts-choice-tmp") {
             localStorage.setItem("config-fonts-choice", e.target.value)
+            $("#config-fonts-choice-tmp").css("font-family", e.target.value)
         }
         if(e.target.id === "config-darkmode") {
-            window.location.reload()
+            toggleDarkMode()
+        }
+        if(e.target.id === "config-focus-mode") {
+            focusMode()
+            $(".Nav_nav__3kyeO").show()
+            $(".Footer_footerWrap__L4iuD").show()
+            $(".Layout_page__2Wedt").css("padding-bottom", "")
         }
         if(e.target.id === "config-fonts"
         && localStorage.getItem("config-fonts") === "false") {

@@ -131,6 +131,12 @@ const darkStyle = /* CSS */ `
         color: rgb(190, 183, 172);
     }
 
+    .AppletTip_appletTip__2U_Sv {
+        color: rgb(198, 163, 100);
+        background-color: rgb(63, 54, 9);
+        border-color: rgb(106, 74, 13);
+    }
+
     .Message_message__w-TNe.alert {
         color: rgb(198, 163, 100);
         border-color: rgb(106, 74, 13);

@@ -43,6 +43,13 @@ const config = [
         name: "choice"
     },
     {
+        content: "自动进入专注模式：",
+        id: "config-focus-mode",
+        default: false,
+        type: "show",
+        name: "choice"
+    },
+    {
         content: "检查更新提示：",
         id: "config-update",
         default: true,
