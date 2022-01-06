@@ -7,7 +7,7 @@ import hideTranslation from "../function/HideTranslation"
 import toggleDarkMode from "../function/ToggleDarkMode"
 import focusMode from "../function/FocusMode"
 
-const fontToggle_conditions = ["study-page", "index_hint", "StudyPage_nextBtn", "StudySummary"]
+const commonConditions = ["study-page", "index_hint", "StudyPage_nextBtn", "StudySummary"]
 
 function Observer() {
     const OuterTargetNode = document.getElementsByClassName("Layout_main__2_zw8")[0]
@@ -26,7 +26,7 @@ function Observer() {
                 hideTranslation()
             }
             if(currentState.indexOf("StudySummary") !== -1) SummaryTranslation.hideSummaryTranslation()
-            fontToggle_conditions.forEach(condition => {
+            commonConditions.forEach(condition => {
                 if(currentState.indexOf(condition) !== -1) {
                     fontToggle()
                     focusMode()
