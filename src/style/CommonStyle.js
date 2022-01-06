@@ -66,7 +66,7 @@ input:checked + .slider:before {
 }
 
 /* config input text */
-#config-fonts-choice-tmp {
+input[type=text] {
     width: 220px;
     margin-left: 10px;
     border: 1px solid #ccc;
@@ -74,6 +74,15 @@ input:checked + .slider:before {
     height: 30px;
     margin-top: 4px;
     line-height: 30px;
+}
+
+button[class=short-keys] {
+    height: 25px;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
 }
 
 `;
