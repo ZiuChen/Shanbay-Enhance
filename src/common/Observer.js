@@ -6,6 +6,7 @@ import noteRemove from "../function/NoteRemove"
 import hideTranslation from "../function/HideTranslation"
 import toggleDarkMode from "../function/ToggleDarkMode"
 import focusMode from "../function/FocusMode"
+import keyDownObserver from "./KeyDownObserver"
 
 const commonConditions = ["study-page", "index_hint", "StudyPage_nextBtn", "StudySummary"]
 
@@ -41,9 +42,7 @@ function Observer() {
         })
     };
     const ExecuteFunctions = () => {
-        if(window.location.hash === "#/study/entry") {
-            checkUpdate()
-        }
+        if(window.location.hash === "#/study/entry") checkUpdate()
         if(window.location.hash === "#/study?type=book") focusMode()
         if(window.location.hash === "#/setting") loadConfig()
         if(window.location.hash.indexOf("#/detail") !== -1) {
@@ -53,6 +52,7 @@ function Observer() {
         }
         toggleDarkMode()
         focusMode()
+        keyDownObserver()
     }
     const OuterObserver = new MutationObserver(OuterCallback)
     OuterObserver.observe(OuterTargetNode, { childList: true, subtree: true })
