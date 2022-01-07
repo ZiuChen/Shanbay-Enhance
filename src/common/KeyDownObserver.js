@@ -1,20 +1,13 @@
 import KeyDownFunctions from "../function/KeyDownFunctions"
 
-const shortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
-console.log("GetshortKeys");
-
-// shortcutKey = localStorage.getItem("config-keycode")
-
-// if(localStorage.getItem("config-keycode") === null) {
-//     localStorage.setItem("config-keycode", JSON.stringify(shortcutKey))
-// }
-
 function executeFuntions(keyCode, type) {
+    let shortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
     shortcutKeys.forEach(config => {
-        if(config.id === type) {
+        if(config.id.indexOf(type) !== -1) {
             config.keyCodes.forEach(code => {
                 if(code === keyCode) {
                     KeyDownFunctions[type]()
+                    return
                 } else return
             })
         }
@@ -24,6 +17,10 @@ function executeFuntions(keyCode, type) {
 function keyDownObserver() {
 	$(document).keydown(e => {
         executeFuntions(e.keyCode, "word-pronunce")
+        executeFuntions(e.keyCode, "example-pronunce")
+        executeFuntions(e.keyCode, "example-pronunce-real-question")
+        executeFuntions(e.keyCode, "summary-toggle")
+        executeFuntions(e.keyCode, "collins-toggle")
 	});
 }
 

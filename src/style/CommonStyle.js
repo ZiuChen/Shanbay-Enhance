@@ -76,10 +76,25 @@ input[type=text] {
     line-height: 30px;
 }
 
-button[class=short-keys] {
+button[class~=short-keys] {
     height: 25px;
     padding-right: 5px;
     padding-left: 5px;
+    margin-top: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+button[class~=short-keys]:focus {
+    background-color: #ccc;
+}
+
+button[class=restore-setting] {
+    height: 25px;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-top: 5px;
     margin-right: 10px;
     cursor: pointer;
     border: 1px solid #ccc;

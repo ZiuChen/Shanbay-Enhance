@@ -21,7 +21,7 @@ async function CheckUpdate() {
         if (weightLastest > weightNow) {
             log("need update")
             toastr.options = {
-                extendedTimeOut: 999999999,
+                timeOut: 999999999,
                 onclick: () => { window.open(`${GreasyUrl}`) }
             }
             toastr.warning(`有新版本：${res}`, `Shanbay Enhance`)

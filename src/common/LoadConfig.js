@@ -1,7 +1,6 @@
 import focusMode from "../function/FocusMode"
 import toggleDarkMode from "../function/ToggleDarkMode"
 import configs from "./Config"
-import CommonData from "./CommonData"
 
 function loadConfig() {
     // Config Initialize
@@ -48,13 +47,14 @@ function loadConfig() {
                     if(localStorage.getItem("config-shortkey-keycode") === null) {
                         shortcutKeys = configs.shortcutKeys
                     }else shortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
+                    options += `<span class="short-keys-wrap">`
                     shortcutKeys.forEach(key => {
-                        CommonData.keyCode
                         options += `${key.name}：`
-                        key.showKeys.forEach(showKey => {
-                            options += `<button class="short-keys" id="${key.id}">${showKey}</button>`
+                        key.showKeys.forEach((showKey, index) => {
+                            options += `<button class="short-keys ${key.id}" key="${key.keyCodes[index]}">${showKey}</button>`
                         })
                     })
+                    options += `</span>`
                 }
             }
             if(item.name === "radio") {
@@ -74,39 +74,60 @@ function loadConfig() {
                 ${ getOptions() }
             </div>`)
     })
+    $(".scriptSettings").append(/* html */`
+    <div class="SettingContainer_item__3RKJY">
+        <span class="SettingContainer_title__1IBOy">恢复初始设置：</span>
+        <button type="checkbox" class="restore-setting" onclick="localStorage.clear();location.reload()">Restore</button>
+    </div>`)
     if(localStorage.getItem("config-fonts") === "false") $("#config-fonts-choice").parent().hide()
     if($("#config-fonts-choice")[0].options.selectedIndex === 0) $("#config-fonts-choice-tmp").val(localStorage.getItem("config-fonts-choice"))
-    if(localStorage.getItem("config-shortkey") === "false") $("#config-keycode-word-pronunce").parent().hide()
-    $(".short-keys").click(clickEvent => {
-        console.log(clickEvent);
-        toastr.options = { extendedTimeOut: 999999999 }
+    if(localStorage.getItem("config-shortkey") === "false") $(".short-keys-wrap").parent().hide()
+    function leftClickCallBack(e) {
+        toastr.options = { timeOut: 999999999, preventDuplicates: true }
         toastr.info("请按下任意键以设置快捷键", "Shanbay Enhance")
         $(document).keydown(keydownEvent => {
-            console.log(keydownEvent);
+            // TODO: move to change() duplicated key varify lacked
             let KeyCodesConfigs = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
-            KeyCodesConfigs.forEach(keyCode => {
-                if(keyCode.id === clickEvent.target.id) {
-                    if(keyCode.keyCodes.indexOf(keydownEvent.keyCode) !== -1) {
-                        console.log(keyCode.keyCodes.indexOf(keydownEvent.keyCode));
+            KeyCodesConfigs.forEach(KeyCodesConfig => {
+                if(KeyCodesConfig.id === e.target.classList[1]) {
+                    if(KeyCodesConfig.keyCodes.indexOf(keydownEvent.keyCode) !== -1) {
                         toastr.clear()
-                        toastr.options = { timeOut: 1000 }
+                        toastr.options = { timeOut: 1000, preventDuplicates: true }
                         toastr.error("快捷键重复", "Shanbay Enhance")
                         return
                     }
-                    keyCode.showKeys.push(keydownEvent.code)
-                    keyCode.keyCodes.push(keydownEvent.keyCode)
+                    let index = KeyCodesConfig.keyCodes.indexOf(parseInt(e.target.attributes["key"].value))
+                    KeyCodesConfig.showKeys[index] = keydownEvent.code
+                    KeyCodesConfig.keyCodes[index] = keydownEvent.keyCode
                     toastr.clear()
-                    $(clickEvent.target).trigger("change")
+                    $(e.target).trigger("change", {type: "shortKey-add", event: {clickEvent: e, keyDownEvent: keydownEvent}})
                 }
             })
-            console.log(KeyCodesConfigs)
             localStorage.setItem("config-shortkey-keycode", JSON.stringify(KeyCodesConfigs))
             $(document).off("keydown")
         })
-        
+    }
+    function rightClickCallBack(e) {
+        e.preventDefault()
+        $(e.target).trigger("change", {type: "shortKey-remove", event: {clickEvent: e}})
+        let KeyCodesConfigs = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
+        KeyCodesConfigs.forEach(KeyCodesConfig => {
+            if(KeyCodesConfig.id === e.target.classList[1]) {
+                let index = KeyCodesConfig.showKeys.indexOf(e.target.innerText)
+                KeyCodesConfig.showKeys[index] = "UNSET"
+                KeyCodesConfig.keyCodes[index] = 0
+                localStorage.setItem("config-shortkey-keycode", JSON.stringify(KeyCodesConfigs))
+            }
+        })
+    }
+    $(".short-keys").click(e => {
+        leftClickCallBack(e)
     })
-    $(".scriptSettings").change(e => {
-        console.log(e);
+    $(".short-keys").contextmenu(e => {
+        // contextmenu handler
+        rightClickCallBack(e)
+    })
+    $(".scriptSettings").change((e, data) => {
         localStorage.setItem(e.target.id, e.target.checked)
         if(e.target.id === "config-fonts-choice") {
             localStorage.setItem(e.target.id, configs.fonts[e.target.options.selectedIndex])
@@ -131,27 +152,36 @@ function loadConfig() {
         }
         if(e.target.id === "config-shortkey"
         && localStorage.getItem("config-shortkey") === "false") {
-            $("#config-keycode-word-pronunce").parent().hide()
+            $(".short-keys-wrap").parent().hide()
         }
         else if(e.target.id === "config-shortkey"
         && localStorage.getItem("config-shortkey") === "true") {
-            $("#config-keycode-word-pronunce").parent().show()
+            $(".short-keys-wrap").parent().show()
         }
-        if(e.target.className === "short-keys") {
-            location.reload()
-            // let shortKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
-            // shortKeys.forEach(key => {
-            //     if(key.id === e.target.id) {
-            //         key.keyCodes.splice(0, key.keyCodes.length) //empty keyCodes
-            //         e.target.value
-            //     }
-                
-            // })
+        if(e.target.classList[0] === "short-keys") {
+            let clickEvent = data.event.clickEvent
+            let keyDownEvent = data.event.keyDownEvent
+            let newTag = ``
+            if(data.type === "shortKey-add") {
+                newTag = `<button class="short-keys ${clickEvent.target.classList[1]}" key="${keyDownEvent.keyCode}">${keyDownEvent.code}</button>`
+            }
+            else if(data.type === "shortKey-remove") {
+                newTag = `<button class="short-keys ${clickEvent.target.classList[1]}" key="0">UNSET</button>`
+            }
+            $(clickEvent.target).replaceWith(newTag)
+            $(".short-keys").off() // remove all listening
+            $(".short-keys").click(e => {
+                // Add listening again
+                leftClickCallBack(e)
+            })
+            $(".short-keys").contextmenu(e => {
+                rightClickCallBack(e)
+             })
         }
         if(e.target.name === "config-example-hide") {
             localStorage.setItem("config-example-hide", e.target.defaultValue)
         }
-        toastr.options = { timeOut: 1000 }
+        toastr.options = { timeOut: 1000, preventDuplicates: true }
         toastr.success("设置已更新", "Shanbay Enhance")
     })
 }

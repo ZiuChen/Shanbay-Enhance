@@ -5,30 +5,37 @@ const shortcutKeys = [
         id: "config-keycode-word-pronunce",
         name: "单词发音",
         able: true,
-        showKeys: ["Numpad3"],
-        keyCodes: [99]
+        showKeys: ["Numpad3", "UNSET"],
+        keyCodes: [99, 0]
     },
     {
         id: "config-keycode-example-pronunce",
         name: "例句发音",
         able: true,
-        showKeys: ["Numpad4"],
-        keyCodes: [100]
+        showKeys: ["Numpad4", "UNSET"],
+        keyCodes: [100, 0]
     },
     {
         id: "config-keycode-example-pronunce-real-question",
         name: "真题例句发音",
         able: true,
-        showKeys: ["Numpad5"],
-        keyCodes: [101]
+        showKeys: ["Numpad5", "UNSET"],
+        keyCodes: [101, 0]
     },
     {
         id: "config-keycode-summary-toggle",
         name: "小结释义遮挡",
         able: true,
         showKeys: ["Enter", "NumpadEnter"],
-        keyCodes: [108, 13]
-    }
+        keyCodes: [13, 108]
+    },
+    {
+        id: "config-keycode-collins-toggle",
+        name: "切换柯林斯词典",
+        able: true,
+        showKeys: ["Numpad6", "UNSET"],
+        keyCodes: [102, 0]
+    },
 ]
 const config = [
     {
@@ -65,7 +72,8 @@ const config = [
         id: "config-shortkey",
         default: "true",
         type: "show",
-        name: "choice"
+        name: "choice-question",
+        info: "开启后，左键点击以编辑快捷键，右键点击以移除快捷键"
     },
     {
         content: "自定义快捷键",

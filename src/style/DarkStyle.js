@@ -316,6 +316,14 @@ const darkStyle = /* CSS */ `
         border-color: rgb(63, 69, 70);
         background-color: rgb(25, 26, 27);
     }
+
+    button[class~="short-keys"] {
+        border-color: rgb(63, 69, 70);
+    }
+
+    button[class="restore-setting"] {
+        border-color: rgb(63, 69, 70);
+    }
 `;
 
 export default darkStyle

@@ -31,7 +31,6 @@ function Observer() {
                 if(currentState.indexOf(condition) !== -1) {
                     fontToggle()
                     focusMode()
-                    keyDownObserver()
                 }
             })
             if(mutation.addedNodes[0].childNodes.length === 0
@@ -39,7 +38,6 @@ function Observer() {
             if(mutation.addedNodes[0].childNodes[0].className.indexOf("wordBox") !== -1) {
                 fontToggle()
                 focusMode()
-                keyDownObserver()
             }
         })
     };
@@ -54,6 +52,7 @@ function Observer() {
         }
         toggleDarkMode()
         focusMode()
+        keyDownObserver()
     }
     const OuterObserver = new MutationObserver(OuterCallback)
     OuterObserver.observe(OuterTargetNode, { childList: true, subtree: true })
