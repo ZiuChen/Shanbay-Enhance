@@ -1,18 +1,21 @@
+
+function executeToggle(passIn, withFor) {
+    if(withFor === 1) {
+        for(let i=0; i < passIn.length; i++) {
+            $(passIn[i]).find("div").toggleClass("hideTrans")
+        }
+    }else $(passIn).find("div").toggleClass("hideTrans")
+}
+
 function toggleSummaryTranslation() {
-    let wordList = document.querySelectorAll(".StudySummaryItem_content__3j9YG")
+    let wordList = $(".StudySummaryItem_content__3j9YG")
     if(localStorage.getItem("config-summary") === "true") {
         localStorage.setItem("config-summary", "false")
-        wordList.forEach(item => {
-            item.style.color = "black"
-            item.getElementsByTagName("div")[0].style.background = ""
-        })
+        executeToggle(wordList, 1)
     }
     else {
         localStorage.setItem("config-summary", "true")
-        wordList.forEach(item => {
-            item.style.color = "#cccccc"
-            item.getElementsByTagName("div")[0].style.background = "#cccccc"
-        })
+        executeToggle(wordList, 1)
     }
 }
 
@@ -25,30 +28,24 @@ function hideSummaryTranslation() {
             <input type="checkbox" ${checked}>
             <div class="slider round"></div>
         </label>`
-    let wordList = document.querySelectorAll(".StudySummaryItem_content__3j9YG")
+    let wordList = $(".StudySummaryItem_content__3j9YG")
     if(localStorage.getItem("config-summary") === "true") {
-        wordList.forEach(item => {
-            item.style.color = "#cccccc"
-            item.getElementsByTagName("div")[0].style.background = "#cccccc"
-        })
+        executeToggle(wordList, 1)
     }
     $($(".StudySummary_studySummary__32y_I .row").get(0)).append(statusSwitch)
     $(".slider").click(function () {
         toggleSummaryTranslation()
     })
-    wordList.forEach((item) => {
-        item.addEventListener("mouseenter", (e) => {
-            let that = e.path[0]
-            that.style.color = "black"
-            that.getElementsByTagName("div")[0].style.background = ""
-        })
-        item.addEventListener("mouseleave", (e) => {
+    for(let i=0; i < wordList.length; i++) {
+        $(wordList[i]).mouseenter(() => {
             if(localStorage.getItem("config-summary") === "false") return
-            let that = e.path[0]
-            that.style.color = "#cccccc"
-            that.getElementsByTagName("div")[0].style.background = "#cccccc"
+            executeToggle(wordList[i], 0)
         })
-    })
+        $(wordList[i]).mouseleave(() => {
+            if(localStorage.getItem("config-summary") === "false") return
+            executeToggle(wordList[i], 0)
+        })
+    }
 }
 export default {
     toggleSummaryTranslation,
