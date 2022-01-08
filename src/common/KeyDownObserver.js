@@ -16,12 +16,14 @@ function executeFuntions(keyCode, type) {
 }
 
 function keyDownObserver() {
-	$(document).keydown(e => {
+    $(document).off("keydown") // Unbind all events first
+	$(document).on("keydown", e => {
         executeFuntions(e.keyCode, "word-pronunce")
         executeFuntions(e.keyCode, "example-pronunce")
         executeFuntions(e.keyCode, "example-pronunce-real-question")
         executeFuntions(e.keyCode, "summary-toggle")
         executeFuntions(e.keyCode, "collins-toggle")
+        executeFuntions(e.keyCode, "toggle-example")
 	});
 }
 

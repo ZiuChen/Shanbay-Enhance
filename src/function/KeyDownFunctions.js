@@ -31,10 +31,24 @@ function collinsToggle() {
     }
 }
 
+function toggleExample() {
+    // hide and remove
+    if(localStorage.getItem("config-example-hide") === "隐藏并移除") {
+        $($(".index_left__2LkyW p")[1]).toggleClass("removeTrans")
+        $(".index_sentenceCn__XJD1u").toggleClass("removeTrans")
+    }
+    // hide and reserved
+    if(localStorage.getItem("config-example-hide") === "隐藏并占位") {
+        $($(".index_left__2LkyW p")[1]).toggleClass("hideTrans")
+        $(".index_sentenceCn__XJD1u").toggleClass("hideTrans")
+    }
+}
+
 export default {
     "word-pronunce": wordPronunce,
     "example-pronunce": examplePronunce,
     "example-pronunce-real-question": examplePronunceRealQuestion,
     "summary-toggle": summaryToggle,
-    "collins-toggle": collinsToggle
+    "collins-toggle": collinsToggle,
+    "toggle-example": toggleExample
 }

@@ -36,6 +36,13 @@ const shortcutKeys = [
         showKeys: ["Numpad6", "UNSET"],
         keyCodes: [102, 0]
     },
+    {
+        id: "config-keycode-toggle-example",
+        name: "显示/隐藏例句翻译",
+        able: true,
+        showKeys: ["Enter", "UNSET"],
+        keyCodes: [13, 0]
+    },
 ]
 const config = [
     {

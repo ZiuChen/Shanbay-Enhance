@@ -1,12 +1,11 @@
+import initializeConfig from "./InitializeConfig"
 import focusMode from "../function/FocusMode"
 import toggleDarkMode from "../function/ToggleDarkMode"
 import configs from "./Config"
 
 function loadConfig() {
     // Config Initialize
-    configs.config.forEach(item => {
-        if(localStorage.getItem(item.id) === null) localStorage.setItem(item.id, item.default)
-    })
+    initializeConfig()
     if(window.location.hash !== "#/setting") return
     // Update Setting List
     $(".SettingContainer_item__3RKJY").wrapAll(`<div class="defaultSettings"></div>`)

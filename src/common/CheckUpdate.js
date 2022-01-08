@@ -1,4 +1,5 @@
 import sendRequest from "./SendRequest"
+import initializeConfig from "./InitializeConfig"
 import log from "./Log"
 const GreasyUrl = "https://greasyfork.org/zh-CN/scripts/437942"
 const { version } = require('../../package.json')
@@ -6,6 +7,7 @@ const { version } = require('../../package.json')
 async function CheckUpdate() {
     log(`script loaded: ${version}`)
     if(window.location.hash !== "#/study/entry") return
+    initializeConfig()
     sendRequest(GreasyUrl, (obj) => {
         return obj.querySelectorAll('.script-show-version>span')[1].textContent
     })
