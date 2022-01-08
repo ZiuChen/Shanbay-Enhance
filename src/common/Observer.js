@@ -25,12 +25,17 @@ function Observer() {
             if(currentState.indexOf("row") !== -1) {
                 noteRemove()
                 hideTranslation()
+                keyDownObserver()
             }
-            if(currentState.indexOf("StudySummary") !== -1) SummaryTranslation.hideSummaryTranslation()
+            if(currentState.indexOf("StudySummary") !== -1) {
+                SummaryTranslation.hideSummaryTranslation()
+                keyDownObserver()
+            }
             commonConditions.forEach(condition => {
                 if(currentState.indexOf(condition) !== -1) {
                     fontToggle()
                     focusMode()
+                    keyDownObserver()
                 }
             })
             if(mutation.addedNodes[0].childNodes.length === 0
@@ -38,6 +43,7 @@ function Observer() {
             if(mutation.addedNodes[0].childNodes[0].className.indexOf("wordBox") !== -1) {
                 fontToggle()
                 focusMode()
+                keyDownObserver()
             }
         })
     };

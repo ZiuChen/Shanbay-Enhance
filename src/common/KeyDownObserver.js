@@ -1,6 +1,7 @@
 import KeyDownFunctions from "../function/KeyDownFunctions"
 
 function executeFuntions(keyCode, type) {
+    if(localStorage.getItem("config-shortkey") === "false") return
     let shortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
     shortcutKeys.forEach(config => {
         if(config.id.indexOf(type) !== -1) {

@@ -26,8 +26,8 @@ const shortcutKeys = [
         id: "config-keycode-summary-toggle",
         name: "小结释义遮挡",
         able: true,
-        showKeys: ["Enter", "NumpadEnter"],
-        keyCodes: [13, 108]
+        showKeys: ["Enter", "UNSET"],
+        keyCodes: [13, 0]
     },
     {
         id: "config-keycode-collins-toggle",

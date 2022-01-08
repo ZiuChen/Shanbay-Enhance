@@ -100,6 +100,21 @@ button[class=restore-setting] {
     border: 1px solid #ccc;
 }
 
+/* hide translation */
+.hideTrans {
+    color: #cccccc;
+    background-color: #cccccc;
+}
+
+.removeTrans {
+    display: none;
+}
+
+.showTrans {
+    color: black;
+    background-color: ;
+}
+
 `;
 
 export default style
