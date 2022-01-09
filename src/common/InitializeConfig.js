@@ -8,7 +8,7 @@ function initializeConfig() {
             let currentShortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"))
             let defaultShortcutKeys = configs.shortcutKeys
             let defaultFuntions = defaultShortcutKeys.map(defaultKey => { return defaultKey.id })
-            let currentFuntions = currentShortcutKeys.map(defaultKey => { return defaultKey.id })
+            let currentFuntions = currentShortcutKeys.map(currentKey => { return currentKey.id })
             let removedFunctions = currentFuntions.filter(currentFunction => {
                 return defaultFuntions.indexOf(currentFunction) === -1
             })
@@ -23,10 +23,10 @@ function initializeConfig() {
                 }
             })
             // add new functions
-            defaultShortcutKeys.forEach(defaultKey => {
+            defaultShortcutKeys.forEach((defaultKey, index) => {
                 if (newFunctions.indexOf(defaultKey.id) !== -1) {
                     log("add new shortKey config")
-                    currentShortcutKeys.push(defaultKey)
+                    currentShortcutKeys.splice(index, 0, defaultKey)
                 }
             })
             localStorage.setItem("config-shortkey-keycode", JSON.stringify(currentShortcutKeys))

@@ -1,11 +1,13 @@
-function wordPronunce() {
-    // TODO: custom US or UK
+function wordPronunceUS() {
     // US
     $(".index_trump__3bTaM:last").click()
     $(".Pronounce_audio__3xdMh:last").click()
+}
+
+function wordPronunceUK() {
     // UK
-    // $(".index_trump__3bTaM:first").click()
-    // $(".Pronounce_audio__3xdMh:first").click()
+    $(".index_trump__3bTaM:first").click()
+    $(".Pronounce_audio__3xdMh:first").click()
 }
 
 function examplePronunce() {
@@ -45,7 +47,8 @@ function toggleExample() {
 }
 
 export default {
-    "word-pronunce": wordPronunce,
+    "word-pronunce-uk": wordPronunceUK,
+    "word-pronunce-us": wordPronunceUS,
     "example-pronunce": examplePronunce,
     "example-pronunce-real-question": examplePronunceRealQuestion,
     "summary-toggle": summaryToggle,

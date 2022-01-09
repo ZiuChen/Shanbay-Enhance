@@ -2,8 +2,15 @@ const fonts = ["", "宋体", "华文中宋", "思源宋体 CN", "微软雅黑", 
 const exampleHideType = ["隐藏并占位", "隐藏并移除", "不隐藏"]
 const shortcutKeys = [
     {
-        id: "config-keycode-word-pronunce",
-        name: "单词发音",
+        id: "config-keycode-word-pronunce-uk",
+        name: "单词发音（英）",
+        able: true,
+        showKeys: ["Numpad0", "UNSET"],
+        keyCodes: [96, 0]
+    },
+        {
+        id: "config-keycode-word-pronunce-us",
+        name: "单词发音（美）",
         able: true,
         showKeys: ["Numpad3", "UNSET"],
         keyCodes: [99, 0]
@@ -83,7 +90,7 @@ const config = [
         info: "开启后，左键点击以编辑快捷键，右键点击以移除快捷键"
     },
     {
-        content: "自定义快捷键",
+        content: "自定义快捷键：",
         id: "config-shortkey-keycode",
         default: JSON.stringify(shortcutKeys),
         type: "show",

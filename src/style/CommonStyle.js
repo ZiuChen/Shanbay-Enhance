@@ -100,6 +100,10 @@ button[class=restore-setting] {
     border: 1px solid #ccc;
 }
 
+.SettingContainer_item__3RKJY .SettingContainer_title__1IBOy {
+    width: 210px;
+}
+
 /* hide translation */
 .hideTrans {
     color: #cccccc;

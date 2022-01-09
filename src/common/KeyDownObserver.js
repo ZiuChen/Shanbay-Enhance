@@ -18,7 +18,8 @@ function executeFuntions(keyCode, type) {
 function keyDownObserver() {
     $(document).off("keydown") // Unbind all events first
 	$(document).on("keydown", e => {
-        executeFuntions(e.keyCode, "word-pronunce")
+        executeFuntions(e.keyCode, "word-pronunce-uk")
+        executeFuntions(e.keyCode, "word-pronunce-us")
         executeFuntions(e.keyCode, "example-pronunce")
         executeFuntions(e.keyCode, "example-pronunce-real-question")
         executeFuntions(e.keyCode, "summary-toggle")
