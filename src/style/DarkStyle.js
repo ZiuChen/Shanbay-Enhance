@@ -312,17 +312,18 @@ const darkStyle = /* CSS */ `
         background-color: rgb(25, 26, 27);
     }
 
-    #config-fonts-choice-tmp {
+    input[type="text"] {
         border-color: rgb(63, 69, 70);
         background-color: rgb(25, 26, 27);
     }
 
     button[class~="short-keys"] {
         border-color: rgb(63, 69, 70);
+        background-color: rgb(25, 26, 27);
     }
-
-    button[class="restore-setting"] {
+    button[class~="settingbutton"] {
         border-color: rgb(63, 69, 70);
+        background-color: rgb(25, 26, 27);
     }
 `;
 

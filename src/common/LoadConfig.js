@@ -2,6 +2,7 @@ import initializeConfig from "./InitializeConfig"
 import focusMode from "../function/FocusMode"
 import toggleDarkMode from "../function/ToggleDarkMode"
 import configs from "./Config"
+import ConfigOperation from "./ConfigOperation"
 
 function loadConfig() {
     // Config Initialize
@@ -56,6 +57,13 @@ function loadConfig() {
                     options += `</span>`
                 }
             }
+            else if(item.id === "config-fonts-selector") {
+                options += `<span class="SettingContainer_title__1IBOy">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${item.content}`
+                options += `<span class="SettingContainer_questionWrap__1nE7J">?<span class="SettingContainer_question__VM3MF">${item.info}</span></span>`
+                options += `</span>`
+                options += `<input type="text" id="config-fonts-selector" placeholder="自定义选择器" value="">`
+            }
             if(item.name === "radio") {
                 options += `<span class="SettingContainer_title__1IBOy">${item.content}</span>`
                 options += `<div>`
@@ -75,10 +83,22 @@ function loadConfig() {
     })
     $(".scriptSettings").append(/* html */`
     <div class="SettingContainer_item__3RKJY">
-        <span class="SettingContainer_title__1IBOy">恢复初始设置：</span>
-        <button type="checkbox" class="restore-setting" onclick="localStorage.clear();location.reload()">Restore</button>
+        <span class="SettingContainer_title__1IBOy">设置选项：</span>
+        <span class="SettingContainer_minititle">导出当前设置：</span>
+        <button type="checkbox" class="settingbutton export-setting">Export</button>
+        <span class="SettingContainer_minititle">导入已有设置：</span>
+        <button type="checkbox" class="settingbutton import-setting">Import</button>
+        <span class="SettingContainer_minititle">恢复初始设置：</span>
+        <button type="checkbox" class="settingbutton restore-setting">Restore</button>
     </div>`)
+    $(".settingbutton").click((e) => {
+        let operation = e.target.classList[1]
+        if(operation.indexOf("export") !== -1) ConfigOperation.exportConfig()
+        if(operation.indexOf("import") !== -1) ConfigOperation.importConfig()
+        if(operation.indexOf("restore") !== -1) ConfigOperation.restoreConfig()
+    })
     if(localStorage.getItem("config-fonts") === "false") $("#config-fonts-choice").parent().hide()
+    $("#config-fonts-selector").val(localStorage.getItem("config-fonts-selector"))
     if($("#config-fonts-choice")[0].options.selectedIndex === 0) $("#config-fonts-choice-tmp").val(localStorage.getItem("config-fonts-choice"))
     if(localStorage.getItem("config-shortkey") === "false") $(".short-keys-wrap").parent().hide()
     function leftClickCallBack(e) {
@@ -144,10 +164,15 @@ function loadConfig() {
         if(e.target.id === "config-fonts"
         && localStorage.getItem("config-fonts") === "false") {
             $("#config-fonts-choice").parent().hide()
+            $("#config-fonts-selector").parent().hide()
         }
         else if(e.target.id === "config-fonts"
         && localStorage.getItem("config-fonts") === "true") {
             $("#config-fonts-choice").parent().show()
+            $("#config-fonts-selector").parent().show()
+        }
+        if(e.target.id === "config-fonts-selector") {
+            localStorage.setItem("config-fonts-selector", $("#config-fonts-selector").val())
         }
         if(e.target.id === "config-shortkey"
         && localStorage.getItem("config-shortkey") === "false") {

@@ -68,12 +68,19 @@ input:checked + .slider:before {
 /* config input text */
 input[type=text] {
     width: 220px;
-    margin-left: 10px;
     border: 1px solid #ccc;
     background-color: #fff;
     height: 30px;
     margin-top: 4px;
     line-height: 30px;
+}
+
+input[id=config-fonts-choice-tmp] {
+    margin-left: 10px;
+}
+
+input[id=config-fonts-selector] {
+    width: 450px;
 }
 
 button[class~=short-keys] {
@@ -86,22 +93,22 @@ button[class~=short-keys] {
     border: 1px solid #ccc;
 }
 
-button[class~=short-keys]:focus {
+button:focus {
     background-color: #ccc;
 }
 
-button[class=restore-setting] {
+button[class~=settingbutton] {
     height: 25px;
     padding-right: 5px;
     padding-left: 5px;
     margin-top: 5px;
-    margin-right: 10px;
+    margin-right: 20px;
     cursor: pointer;
     border: 1px solid #ccc;
 }
 
-.SettingContainer_item__3RKJY .SettingContainer_title__1IBOy {
-    width: 210px;
+.short-keys-wrap {
+    width: 1000px;
 }
 
 /* hide translation */

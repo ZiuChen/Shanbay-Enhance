@@ -1,6 +1,6 @@
 {
   "name": "shanbay-enhance",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "More function for Shanbay.",
   "main": "userscript.js",
   "scripts": {

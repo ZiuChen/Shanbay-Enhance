@@ -1,11 +1,12 @@
 import sendRequest from "./SendRequest"
 import initializeConfig from "./InitializeConfig"
 import log from "./Log"
-const GreasyUrl = "https://greasyfork.org/zh-CN/scripts/437942"
-const { version } = require('../../package.json')
+import Config from "./Config"
+const ScriptID = "437942"
+const GreasyUrl = `https://greasyfork.org/zh-CN/scripts/${ScriptID}`
 
 async function CheckUpdate() {
-    log(`script loaded: ${version}`)
+    log(`script loaded: ${Config.version}`)
     if(window.location.hash !== "#/study/entry") return
     initializeConfig()
     sendRequest(GreasyUrl, (obj) => {
@@ -17,21 +18,21 @@ async function CheckUpdate() {
         res.split('.').reverse().forEach((value, index) => {
             weightLastest += (index + 1) * value
         })
-        version.split('.').reverse().forEach((value, index) => {
+        Config.version.split('.').reverse().forEach((value, index) => {
             weightNow += (index + 1) * value
         })
         if (weightLastest > weightNow) {
             log("need update")
             toastr.options = {
                 timeOut: 999999999,
-                onclick: () => { window.open(`${GreasyUrl}`) }
+                onclick: () => { location.href = `${GreasyUrl}/code/${ScriptID}.user.js` }
             }
-            toastr.warning(`有新版本：${res}`, `Shanbay Enhance`)
+            toastr.warning(`有新版本：${res}，点击更新脚本。`, `Shanbay Enhance`)
         } else {
             log("version Checked")
             if(localStorage.getItem("config-update") !== "true") return
             toastr.options = { timeOut: 1000 }
-            toastr.success(`版本已是最新：${version}`, `Shanbay Enhance`)
+            toastr.success(`版本已是最新：${Config.version}`, `Shanbay Enhance`)
         }
     })
 }
