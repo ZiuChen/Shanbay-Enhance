@@ -7,6 +7,7 @@ import hideTranslation from "../function/HideTranslation"
 import toggleDarkMode from "../function/ToggleDarkMode"
 import focusMode from "../function/FocusMode"
 import keyDownObserver from "./KeyDownObserver"
+import slipPronunce from "../function/SlipPronunce"
 
 const commonConditions = ["study-page", "index_hint", "StudyPage_nextBtn", "StudySummary"]
 
@@ -28,6 +29,7 @@ function Observer() {
             }
             if(currentState.indexOf("StudySummary") !== -1) {
                 SummaryTranslation.hideSummaryTranslation()
+                slipPronunce()
             }
             if(currentState.indexOf("study-page") !== -1) {
                 keyDownObserver()

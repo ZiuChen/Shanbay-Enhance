@@ -125,6 +125,13 @@ const config = [
         name: "choice"
     },
     {
+        content: "单词总结自动发音：",
+        id: "config-silp-pronunce",
+        default: true,
+        type: "show",
+        name: "choice"
+    },
+    {
         content: "部分字体修改：",
         id: "config-fonts",
         default: true,
