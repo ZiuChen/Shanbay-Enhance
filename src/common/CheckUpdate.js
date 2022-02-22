@@ -16,10 +16,10 @@ async function CheckUpdate() {
         let weightLastest = 0
         let weightNow = 0
         res.split('.').reverse().forEach((value, index) => {
-            weightLastest += (index + 1) * value
+            weightLastest += ((index + 1) * Math.pow(10, index+1)) * value
         })
         Config.version.split('.').reverse().forEach((value, index) => {
-            weightNow += (index + 1) * value
+            weightNow += ((index + 1) * Math.pow(10, index+1)) * value
         })
         if (weightLastest > weightNow) {
             log("need update")
