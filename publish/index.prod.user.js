@@ -3,7 +3,7 @@
 // @name:en          Shanbay Enhance
 // @description      扇贝单词功能增强，带来更好的背单词体验。❤单词总结释义遮挡❤隐藏例句翻译❤自定义单词例句字体❤自定义功能快捷键❤专注模式/深色模式
 // @description:en   More function for Shanbay.
-// @version          0.1.4
+// @version          0.1.7
 // @author           ZiuChen
 // @namespace        https://greasyfork.org/zh-CN/users/605474
 // @icon             https://gitee.com/ziuc/utool-filebed/raw/master/20210514-231824-0795.png
@@ -23,7 +23,7 @@
 /***/ "./package.json":
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"name":"shanbay-enhance","version":"0.1.4","description":"More function for Shanbay.","main":"userscript.js","scripts":{"dev":"webpack --mode development --config config/webpack.config.dev.js","build":"webpack --mode production --config config/webpack.config.prod.js"},"repository":{"type":"git","url":"git+https://github.com/ZiuChen/Shanbay-Enhance.git"},"author":"ZiuChen","license":"MIT","bugs":{"url":"https://github.com/ZiuChen/Shanbay-Enhance/issues"},"homepage":"https://github.com/ZiuChen/Shanbay-Enhance#readme","devDependencies":{"@babel/core":"^7.16.7","babel-loader":"^8.2.3","userscript-metadata-webpack-plugin":"^0.1.1","webpack":"^5.65.0","webpack-cli":"^4.9.1","webpack-livereload-plugin":"^3.0.2","webpack-merge":"^5.8.0"},"dependencies":{}}');
+module.exports = JSON.parse('{"name":"shanbay-enhance","version":"0.1.7","description":"More function for Shanbay.","main":"userscript.js","scripts":{"dev":"webpack --mode development --config config/webpack.config.dev.js","build":"webpack --mode production --config config/webpack.config.prod.js"},"repository":{"type":"git","url":"git+https://github.com/ZiuChen/Shanbay-Enhance.git"},"author":"ZiuChen","license":"MIT","bugs":{"url":"https://github.com/ZiuChen/Shanbay-Enhance/issues"},"homepage":"https://github.com/ZiuChen/Shanbay-Enhance#readme","devDependencies":{"@babel/core":"^7.16.7","babel-loader":"^8.2.3","userscript-metadata-webpack-plugin":"^0.1.1","webpack":"^5.65.0","webpack-cli":"^4.9.1","webpack-livereload-plugin":"^3.0.2","webpack-merge":"^5.8.0"},"dependencies":{}}');
 
 /***/ })
 
@@ -131,12 +131,19 @@ input:checked + .slider:before {
 /* config input text */
 input[type=text] {
     width: 220px;
-    margin-left: 10px;
     border: 1px solid #ccc;
     background-color: #fff;
     height: 30px;
     margin-top: 4px;
     line-height: 30px;
+}
+
+input[id=config-fonts-choice-tmp] {
+    margin-left: 10px;
+}
+
+input[id=config-fonts-selector] {
+    width: 450px;
 }
 
 button[class~=short-keys] {
@@ -149,18 +156,37 @@ button[class~=short-keys] {
     border: 1px solid #ccc;
 }
 
-button[class~=short-keys]:focus {
+button:focus {
     background-color: #ccc;
 }
 
-button[class=restore-setting] {
+button[class~=settingbutton] {
     height: 25px;
     padding-right: 5px;
     padding-left: 5px;
     margin-top: 5px;
-    margin-right: 10px;
+    margin-right: 20px;
     cursor: pointer;
     border: 1px solid #ccc;
+}
+
+.short-keys-wrap {
+    width: 1000px;
+}
+
+/* hide translation */
+.hideTrans {
+    color: #cccccc;
+    background-color: #cccccc;
+}
+
+.removeTrans {
+    display: none;
+}
+
+.showTrans {
+    color: black;
+    background-color: ;
 }
 
 `;
@@ -205,34 +231,256 @@ async function sendRequest(url, callBack, options) {
 }
 
 /* harmony default export */ const SendRequest = (sendRequest);
+;// CONCATENATED MODULE: ./src/common/Config.js
+const {
+  version
+} = __webpack_require__("./package.json");
+
+const fonts = ["", "宋体", "华文中宋", "思源宋体 CN", "微软雅黑", "等线", "仿宋"];
+const exampleHideType = ["隐藏并占位", "隐藏并移除", "不隐藏"];
+const fontToggleSelectors = [{
+  name: "学习页单词",
+  selector: ".index_word__3nhJU",
+  enable: true
+}, {
+  name: "详情页单词",
+  selector: ".VocabPronounce_word__17Tma",
+  enable: true
+}, {
+  name: "单词小结",
+  selector: ".StudySummaryItem_studySummaryItem__k2ME0",
+  enable: true
+}, {
+  name: "提示例句",
+  selector: ".index_hint__2Z39O",
+  enable: true
+}, {
+  name: "单词词义",
+  selector: ".BayTrans_paraphrase__2JMIz",
+  enable: true
+}, {
+  name: "单词例句",
+  selector: ".BayTrans_exampleBox__3CsaJ",
+  enable: true
+}, {
+  name: "真题词义",
+  selector: ".index_name__1gkfJ",
+  enable: true
+}, {
+  name: "真题例句",
+  selector: ".index_left__2SYuy",
+  enable: true
+}, {
+  name: "学习页选项",
+  selector: ".index_btnBox__pXO_l",
+  enable: false
+}, {
+  name: "音标",
+  selector: ".Pronounce_phonetic__1bcqt, .index_phonetic__o-RcB",
+  enable: false
+}, {
+  name: "模块前说明文本（单词解释/真题例句）",
+  selector: ".span1",
+  enable: false
+}];
+const shortcutKeys = [{
+  id: "config-keycode-word-pronunce-uk",
+  name: "单词发音（英）",
+  able: true,
+  showKeys: ["Numpad0", "UNSET"],
+  keyCodes: [96, 0]
+}, {
+  id: "config-keycode-word-pronunce-us",
+  name: "单词发音（美）",
+  able: true,
+  showKeys: ["Numpad3", "UNSET"],
+  keyCodes: [99, 0]
+}, {
+  id: "config-keycode-example-pronunce",
+  name: "例句发音",
+  able: true,
+  showKeys: ["Numpad4", "UNSET"],
+  keyCodes: [100, 0]
+}, {
+  id: "config-keycode-example-pronunce-real-question",
+  name: "真题例句发音",
+  able: true,
+  showKeys: ["Numpad5", "UNSET"],
+  keyCodes: [101, 0]
+}, {
+  id: "config-keycode-summary-toggle",
+  name: "小结释义遮挡",
+  able: true,
+  showKeys: ["Enter", "UNSET"],
+  keyCodes: [13, 0]
+}, {
+  id: "config-keycode-collins-toggle",
+  name: "切换柯林斯词典",
+  able: true,
+  showKeys: ["Numpad6", "UNSET"],
+  keyCodes: [102, 0]
+}, {
+  id: "config-keycode-toggle-example",
+  name: "显示/隐藏例句翻译",
+  able: true,
+  showKeys: ["Enter", "UNSET"],
+  keyCodes: [13, 0]
+}];
+const config = [{
+  content: "深色模式：",
+  id: "config-darkmode",
+  default: false,
+  type: "show",
+  name: "choice"
+}, {
+  content: "单词总结释义遮挡：",
+  id: "config-summary",
+  default: true,
+  type: "show",
+  name: "choice"
+}, {
+  content: "单词总结自动发音：",
+  id: "config-silp-pronunce",
+  default: true,
+  type: "show",
+  name: "choice"
+}, {
+  content: "部分字体修改：",
+  id: "config-fonts",
+  default: true,
+  type: "show",
+  name: "choice-question",
+  info: "开启后，单词、释义、例句的字体将会被修改"
+}, {
+  content: "选择使用的字体：",
+  id: "config-fonts-choice",
+  default: "宋体",
+  type: "show",
+  name: "select"
+}, {
+  content: "修改选择器：",
+  id: "config-fonts-selector",
+  default: JSON.stringify(fontToggleSelectors),
+  type: "show",
+  name: "input",
+  info: "自定义修改页面中哪些元素的字体，务必以最小化形式填回。"
+}, {
+  content: "快捷键增强：",
+  id: "config-shortkey",
+  default: "true",
+  type: "show",
+  name: "choice-question",
+  info: "开启后，左键点击以编辑快捷键，右键点击以移除快捷键"
+}, {
+  content: "自定义快捷键：",
+  id: "config-shortkey-keycode",
+  default: JSON.stringify(shortcutKeys),
+  type: "show",
+  name: "select"
+}, {
+  content: "例句翻译隐藏：",
+  id: "config-example-hide",
+  default: "隐藏并占位",
+  type: "show",
+  name: "radio"
+}, {
+  content: "移除笔记栏：",
+  id: "config-note-remove",
+  default: true,
+  type: "show",
+  name: "choice"
+}, {
+  content: "自动进入专注模式：",
+  id: "config-focus-mode",
+  default: false,
+  type: "show",
+  name: "choice"
+}, {
+  content: "检查更新提示：",
+  id: "config-update",
+  default: true,
+  type: "show",
+  name: "choice"
+}];
+/* harmony default export */ const Config = ({
+  version: version,
+  config: config,
+  shortcutKeys: shortcutKeys,
+  fontToggleSelectors: fontToggleSelectors,
+  fonts: fonts,
+  exampleHideType: exampleHideType
+});
 ;// CONCATENATED MODULE: ./src/common/Log.js
 function log(msg) {
   console.log(`%c[Shanbay Enhance] ${msg}`, "color: #209e85");
 }
 
 /* harmony default export */ const Log = (log);
+;// CONCATENATED MODULE: ./src/common/InitializeConfig.js
+
+
+
+function initializeConfig() {
+  Config.config.forEach(item => {
+    if (localStorage.getItem(item.id) === null) localStorage.setItem(item.id, item.default);
+
+    if (item.id === "config-shortkey-keycode") {
+      let currentShortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"));
+      let defaultShortcutKeys = Config.shortcutKeys;
+      let defaultFuntions = defaultShortcutKeys.map(defaultKey => {
+        return defaultKey.id;
+      });
+      let currentFuntions = currentShortcutKeys.map(currentKey => {
+        return currentKey.id;
+      });
+      let removedFunctions = currentFuntions.filter(currentFunction => {
+        return defaultFuntions.indexOf(currentFunction) === -1;
+      });
+      let newFunctions = defaultFuntions.filter(defaultFuntion => {
+        return currentFuntions.indexOf(defaultFuntion) === -1;
+      }); // remove removed functions
+
+      currentShortcutKeys.forEach((currentKey, index) => {
+        if (removedFunctions.indexOf(currentKey.id) !== -1) {
+          Log("remove shortKey config");
+          currentShortcutKeys.splice(index, 1);
+        }
+      }); // add new functions
+
+      defaultShortcutKeys.forEach((defaultKey, index) => {
+        if (newFunctions.indexOf(defaultKey.id) !== -1) {
+          Log("add new shortKey config");
+          currentShortcutKeys.splice(index, 0, defaultKey);
+        }
+      });
+      localStorage.setItem("config-shortkey-keycode", JSON.stringify(currentShortcutKeys));
+    }
+  });
+}
+
+/* harmony default export */ const InitializeConfig = (initializeConfig);
 ;// CONCATENATED MODULE: ./src/common/CheckUpdate.js
 
 
-const GreasyUrl = "https://greasyfork.org/zh-CN/scripts/437942";
 
-const {
-  version
-} = __webpack_require__("./package.json");
+
+const ScriptID = "437942";
+const GreasyUrl = `https://greasyfork.org/zh-CN/scripts/${ScriptID}`;
 
 async function CheckUpdate() {
-  Log(`script loaded: ${version}`);
+  Log(`script loaded: ${Config.version}`);
   if (window.location.hash !== "#/study/entry") return;
+  InitializeConfig();
   SendRequest(GreasyUrl, obj => {
     return obj.querySelectorAll('.script-show-version>span')[1].textContent;
   }).then(res => {
     let weightLastest = 0;
     let weightNow = 0;
     res.split('.').reverse().forEach((value, index) => {
-      weightLastest += (index + 1) * value;
+      weightLastest += (index + 1) * Math.pow(10, index + 1) * value;
     });
-    version.split('.').reverse().forEach((value, index) => {
-      weightNow += (index + 1) * value;
+    Config.version.split('.').reverse().forEach((value, index) => {
+      weightNow += (index + 1) * Math.pow(10, index + 1) * value;
     });
 
     if (weightLastest > weightNow) {
@@ -240,17 +488,17 @@ async function CheckUpdate() {
       toastr.options = {
         timeOut: 999999999,
         onclick: () => {
-          window.open(`${GreasyUrl}`);
+          location.href = `${GreasyUrl}/code/${ScriptID}.user.js`;
         }
       };
-      toastr.warning(`有新版本：${res}`, `Shanbay Enhance`);
+      toastr.warning(`有新版本：${res}，点击更新脚本。`, `Shanbay Enhance`);
     } else {
       Log("version Checked");
       if (localStorage.getItem("config-update") !== "true") return;
       toastr.options = {
         timeOut: 1000
       };
-      toastr.success(`版本已是最新：${version}`, `Shanbay Enhance`);
+      toastr.success(`版本已是最新：${Config.version}`, `Shanbay Enhance`);
     }
   });
 }
@@ -596,17 +844,18 @@ const darkStyle =
         background-color: rgb(25, 26, 27);
     }
 
-    #config-fonts-choice-tmp {
+    input[type="text"] {
         border-color: rgb(63, 69, 70);
         background-color: rgb(25, 26, 27);
     }
 
     button[class~="short-keys"] {
         border-color: rgb(63, 69, 70);
+        background-color: rgb(25, 26, 27);
     }
-
-    button[class="restore-setting"] {
+    button[class~="settingbutton"] {
         border-color: rgb(63, 69, 70);
+        background-color: rgb(25, 26, 27);
     }
 `;
 /* harmony default export */ const DarkStyle = (darkStyle);
@@ -622,119 +871,94 @@ function toggleDarkMode() {
 }
 
 /* harmony default export */ const ToggleDarkMode = (toggleDarkMode);
-;// CONCATENATED MODULE: ./src/common/Config.js
-const fonts = ["", "宋体", "华文中宋", "思源宋体 CN", "微软雅黑", "等线", "仿宋"];
-const exampleHideType = ["隐藏并占位", "隐藏并移除", "不隐藏"];
-const shortcutKeys = [{
-  id: "config-keycode-word-pronunce",
-  name: "单词发音",
-  able: true,
-  showKeys: ["Numpad3", "UNSET"],
-  keyCodes: [99, 0]
-}, {
-  id: "config-keycode-example-pronunce",
-  name: "例句发音",
-  able: true,
-  showKeys: ["Numpad4", "UNSET"],
-  keyCodes: [100, 0]
-}, {
-  id: "config-keycode-example-pronunce-real-question",
-  name: "真题例句发音",
-  able: true,
-  showKeys: ["Numpad5", "UNSET"],
-  keyCodes: [101, 0]
-}, {
-  id: "config-keycode-summary-toggle",
-  name: "小结释义遮挡",
-  able: true,
-  showKeys: ["Enter", "NumpadEnter"],
-  keyCodes: [13, 108]
-}, {
-  id: "config-keycode-collins-toggle",
-  name: "切换柯林斯词典",
-  able: true,
-  showKeys: ["Numpad6", "UNSET"],
-  keyCodes: [102, 0]
-}];
-const config = [{
-  content: "深色模式：",
-  id: "config-darkmode",
-  default: false,
-  type: "show",
-  name: "choice"
-}, {
-  content: "单词总结释义遮挡：",
-  id: "config-summary",
-  default: true,
-  type: "show",
-  name: "choice"
-}, {
-  content: "部分字体修改：",
-  id: "config-fonts",
-  default: true,
-  type: "show",
-  name: "choice-question",
-  info: "开启后，单词、释义、例句的字体将会被修改"
-}, {
-  content: "选择使用的字体：",
-  id: "config-fonts-choice",
-  default: "宋体",
-  type: "show",
-  name: "select"
-}, {
-  content: "快捷键增强：",
-  id: "config-shortkey",
-  default: "true",
-  type: "show",
-  name: "choice-question",
-  info: "开启后，左键点击以编辑快捷键，右键点击以移除快捷键"
-}, {
-  content: "自定义快捷键",
-  id: "config-shortkey-keycode",
-  default: JSON.stringify(shortcutKeys),
-  type: "show",
-  name: "select"
-}, {
-  content: "例句翻译隐藏：",
-  id: "config-example-hide",
-  default: "隐藏并占位",
-  type: "show",
-  name: "radio"
-}, {
-  content: "移除笔记栏：",
-  id: "config-note-remove",
-  default: true,
-  type: "show",
-  name: "choice"
-}, {
-  content: "自动进入专注模式：",
-  id: "config-focus-mode",
-  default: false,
-  type: "show",
-  name: "choice"
-}, {
-  content: "检查更新提示：",
-  id: "config-update",
-  default: true,
-  type: "show",
-  name: "choice"
-}];
-/* harmony default export */ const Config = ({
-  config: config,
-  shortcutKeys: shortcutKeys,
-  fonts: fonts,
-  exampleHideType: exampleHideType
+;// CONCATENATED MODULE: ./src/common/ConfigOperation.js
+
+
+const checkString = "Shanbay Enhance Setting";
+
+async function importConfig() {
+  let input = document.createElement("input");
+  input.type = "file";
+  input.click();
+  $(input).change(e => {
+    let reader = new FileReader();
+
+    reader.onload = res => {
+      let target = res.target;
+
+      if (target.result.indexOf(`${checkString}`) === -1) {
+        toastr.error("请检查设置文件是否正确", "Shanbay Enhance");
+        Log("Import aborted");
+        $(input).val("");
+        return;
+      }
+
+      let data = JSON.parse(target.result);
+      data.forEach((config, index) => {
+        if (index === 0) return;
+        localStorage.setItem(config.id, config.value);
+      });
+      toastr.success("成功导入设置，即将刷新", "Shanbay Enhance");
+      Log("Settings have been imported");
+      setTimeout("location.reload()", 1000);
+    };
+
+    reader.readAsText(e.target.files[0], "utf-8");
+  });
+}
+
+function exportConfig() {
+  let version = Config.version;
+  let timeStamp = new Date().valueOf();
+  let currentConfig = [{
+    check: `${checkString}`,
+    version: version,
+    timeStamp: timeStamp
+  }];
+  Config.config.forEach(config => {
+    let currentConfigObj = {};
+    currentConfigObj.id = config.id;
+    currentConfigObj.value = localStorage.getItem(config.id);
+    currentConfig.push(currentConfigObj);
+  });
+  currentConfig = JSON.stringify(currentConfig);
+  let blob = new Blob([currentConfig], {
+    type: "text/json"
+  }),
+      a = document.createElement("a");
+  a.download = `[Shanbay Enhance] setting.json`;
+  a.href = window.URL.createObjectURL(blob);
+  toastr.success("成功导出设置", "Shanbay Enhance");
+  setTimeout(() => {
+    a.click();
+  }, 1000);
+  Log("Settings Exported");
+}
+
+function restoreConfig() {
+  toastr.success("成功恢复初始设置，即将刷新", "Shanbay Enhance");
+  setTimeout(() => {
+    localStorage.clear();
+    location.reload();
+  }, 1000);
+  Log("Settings have been reset");
+}
+
+/* harmony default export */ const ConfigOperation = ({
+  importConfig: importConfig,
+  exportConfig: exportConfig,
+  restoreConfig: restoreConfig
 });
 ;// CONCATENATED MODULE: ./src/common/LoadConfig.js
 
 
 
 
+
+
 function loadConfig() {
   // Config Initialize
-  Config.config.forEach(item => {
-    if (localStorage.getItem(item.id) === null) localStorage.setItem(item.id, item.default);
-  });
+  InitializeConfig();
   if (window.location.hash !== "#/setting") return; // Update Setting List
 
   $(".SettingContainer_item__3RKJY").wrapAll(`<div class="defaultSettings"></div>`);
@@ -789,6 +1013,12 @@ function loadConfig() {
           });
           options += `</span>`;
         }
+      } else if (item.id === "config-fonts-selector") {
+        options += `<span class="SettingContainer_title__1IBOy">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${item.content}`;
+        options += `<span class="SettingContainer_questionWrap__1nE7J">?<span class="SettingContainer_question__VM3MF">${item.info}</span></span>`;
+        options += `</span>`;
+        options += `<input type="text" id="config-fonts-selector" placeholder="自定义选择器" value="">`;
       }
 
       if (item.name === "radio") {
@@ -816,10 +1046,22 @@ function loadConfig() {
   /* html */
   `
     <div class="SettingContainer_item__3RKJY">
-        <span class="SettingContainer_title__1IBOy">恢复初始设置：</span>
-        <button type="checkbox" class="restore-setting" onclick="localStorage.clear();location.reload()">Restore</button>
+        <span class="SettingContainer_title__1IBOy">设置选项：</span>
+        <span class="SettingContainer_minititle">导出当前设置：</span>
+        <button type="checkbox" class="settingbutton export-setting">Export</button>
+        <span class="SettingContainer_minititle">导入已有设置：</span>
+        <button type="checkbox" class="settingbutton import-setting">Import</button>
+        <span class="SettingContainer_minititle">恢复初始设置：</span>
+        <button type="checkbox" class="settingbutton restore-setting">Restore</button>
     </div>`);
+  $(".settingbutton").click(e => {
+    let operation = e.target.classList[1];
+    if (operation.indexOf("export") !== -1) ConfigOperation.exportConfig();
+    if (operation.indexOf("import") !== -1) ConfigOperation.importConfig();
+    if (operation.indexOf("restore") !== -1) ConfigOperation.restoreConfig();
+  });
   if (localStorage.getItem("config-fonts") === "false") $("#config-fonts-choice").parent().hide();
+  $("#config-fonts-selector").val(localStorage.getItem("config-fonts-selector"));
   if ($("#config-fonts-choice")[0].options.selectedIndex === 0) $("#config-fonts-choice-tmp").val(localStorage.getItem("config-fonts-choice"));
   if (localStorage.getItem("config-shortkey") === "false") $(".short-keys-wrap").parent().hide();
 
@@ -910,8 +1152,14 @@ function loadConfig() {
 
     if (e.target.id === "config-fonts" && localStorage.getItem("config-fonts") === "false") {
       $("#config-fonts-choice").parent().hide();
+      $("#config-fonts-selector").parent().hide();
     } else if (e.target.id === "config-fonts" && localStorage.getItem("config-fonts") === "true") {
       $("#config-fonts-choice").parent().show();
+      $("#config-fonts-selector").parent().show();
+    }
+
+    if (e.target.id === "config-fonts-selector") {
+      localStorage.setItem("config-fonts-selector", $("#config-fonts-selector").val());
     }
 
     if (e.target.id === "config-shortkey" && localStorage.getItem("config-shortkey") === "false") {
@@ -957,21 +1205,23 @@ function loadConfig() {
 
 /* harmony default export */ const LoadConfig = (loadConfig);
 ;// CONCATENATED MODULE: ./src/function/SummaryTranslation.js
+function executeToggle(passIn, withFor) {
+  if (withFor === 1) {
+    for (let i = 0; i < passIn.length; i++) {
+      $(passIn[i]).find("div").toggleClass("hideTrans");
+    }
+  } else $(passIn).find("div").toggleClass("hideTrans");
+}
+
 function toggleSummaryTranslation() {
-  let wordList = document.querySelectorAll(".StudySummaryItem_content__3j9YG");
+  let wordList = $(".StudySummaryItem_content__3j9YG");
 
   if (localStorage.getItem("config-summary") === "true") {
     localStorage.setItem("config-summary", "false");
-    wordList.forEach(item => {
-      item.style.color = "black";
-      item.getElementsByTagName("div")[0].style.background = "";
-    });
+    executeToggle(wordList, 1);
   } else {
     localStorage.setItem("config-summary", "true");
-    wordList.forEach(item => {
-      item.style.color = "#cccccc";
-      item.getElementsByTagName("div")[0].style.background = "#cccccc";
-    });
+    executeToggle(wordList, 1);
   }
 }
 
@@ -987,32 +1237,27 @@ function hideSummaryTranslation() {
             <input type="checkbox" ${checked}>
             <div class="slider round"></div>
         </label>`;
-  let wordList = document.querySelectorAll(".StudySummaryItem_content__3j9YG");
+  let wordList = $(".StudySummaryItem_content__3j9YG");
 
   if (localStorage.getItem("config-summary") === "true") {
-    wordList.forEach(item => {
-      item.style.color = "#cccccc";
-      item.getElementsByTagName("div")[0].style.background = "#cccccc";
-    });
+    executeToggle(wordList, 1);
   }
 
   $($(".StudySummary_studySummary__32y_I .row").get(0)).append(statusSwitch);
   $(".slider").click(function () {
     toggleSummaryTranslation();
   });
-  wordList.forEach(item => {
-    item.addEventListener("mouseenter", e => {
-      let that = e.path[0];
-      that.style.color = "black";
-      that.getElementsByTagName("div")[0].style.background = "";
-    });
-    item.addEventListener("mouseleave", e => {
+
+  for (let i = 0; i < wordList.length; i++) {
+    $(wordList[i]).mouseenter(() => {
       if (localStorage.getItem("config-summary") === "false") return;
-      let that = e.path[0];
-      that.style.color = "#cccccc";
-      that.getElementsByTagName("div")[0].style.background = "#cccccc";
+      executeToggle(wordList[i], 0);
     });
-  });
+    $(wordList[i]).mouseleave(() => {
+      if (localStorage.getItem("config-summary") === "false") return;
+      executeToggle(wordList[i], 0);
+    });
+  }
 }
 
 /* harmony default export */ const SummaryTranslation = ({
@@ -1020,36 +1265,20 @@ function hideSummaryTranslation() {
   hideSummaryTranslation
 });
 ;// CONCATENATED MODULE: ./src/function/FontToggle.js
-const selectors = [{
-  name: "学习页单词",
-  selector: ".index_word__3nhJU"
-}, {
-  name: "详情页单词",
-  selector: ".VocabPronounce_word__17Tma"
-}, {
-  name: "单词小结",
-  selector: ".StudySummaryItem_studySummaryItem__k2ME0"
-}, {
-  name: "提示例句",
-  selector: ".index_hint__2Z39O"
-}, {
-  name: "单词词义",
-  selector: ".BayTrans_paraphrase__2JMIz"
-}, {
-  name: "单词例句",
-  selector: ".BayTrans_exampleBox__3CsaJ"
-}, {
-  name: "真题词义",
-  selector: ".index_name__1gkfJ"
-}, {
-  name: "真题例句",
-  selector: ".index_left__2SYuy"
-}];
-
 function fontToggle() {
   if (localStorage.getItem("config-fonts") === "false") return;
-  selectors.forEach(item => {
-    $(item.selector).css("font-family", localStorage.getItem("config-fonts-choice"));
+  let selectors = JSON.parse(localStorage.getItem("config-fonts-selector"));
+  let fontToggle =
+  /* CSS */
+  `
+        .fontToggle {
+            font-family: ${localStorage.getItem("config-fonts-choice")};
+        }
+    `;
+  $("head").append(`<style class="fontToggle">${fontToggle}</style>`);
+  selectors.forEach(selector => {
+    if (selector.enable === false) return;
+    $(selector.selector).addClass("fontToggle");
   });
 }
 
@@ -1064,7 +1293,8 @@ function noteRemove() {
 ;// CONCATENATED MODULE: ./src/function/HideTranslation.js
 function hideTranslation() {
   if (localStorage.getItem("config-example-hide") === "不隐藏") return;
-  let en = $(".index_sentenceEn__1Qjgx");
+  let en = $(".index_sentenceEn__1Qjgx"); // real question
+
   let cn = $(".index_sentenceCn__XJD1u");
   let example = $(".index_left__2LkyW p");
 
@@ -1073,69 +1303,52 @@ function hideTranslation() {
       $(en[i]).attr("title", $(cn[i]).text());
       $(en[i]).css("cursor", "pointer");
       $(en[i]).click(() => {
-        $(cn[i]).toggle();
+        $(cn[i]).toggleClass("removeTrans");
       });
     }
 
     $(example[0]).attr("title", $(example[1]).text());
     $(example[0]).css("cursor", "pointer");
     $(example[0]).click(() => {
-      $(example[1]).toggle();
+      $(example[1]).toggleClass("removeTrans");
     });
-    $($(".index_left__2LkyW p")[1]).hide();
-    $(".index_sentenceCn__XJD1u").hide();
+    $($(".index_left__2LkyW p")[1]).toggleClass("removeTrans");
+    $(".index_sentenceCn__XJD1u").toggleClass("removeTrans");
   }
 
   if (localStorage.getItem("config-example-hide") === "隐藏并占位") {
     for (let i = 0; i < $(".index_sentenceEn__1Qjgx").length; i++) {
-      $(cn[i]).css("cursor", "pointer");
-      $(cn[i]).css({
-        "color": "#cccccc",
-        "background-color": "#cccccc"
-      });
+      $(cn[i]).toggleClass("hideTrans");
       $(cn[i]).mouseenter(e => {
-        $(e.target).css({
-          "color": "black",
-          "background-color": ""
-        });
+        $(e.target).toggleClass("hideTrans");
       });
       $(cn[i]).mouseleave(e => {
-        $(e.target).css({
-          "color": "#cccccc",
-          "background-color": "#cccccc"
-        });
+        $(e.target).toggleClass("hideTrans");
       });
     }
 
-    $(example[1]).css("cursor", "pointer");
-    $(example[1]).css({
-      "color": "#cccccc",
-      "background-color": "#cccccc"
-    });
+    $(example[1]).toggleClass("hideTrans");
     $(example[1]).mouseenter(e => {
-      $(e.target).css({
-        "color": "black",
-        "background-color": ""
-      });
+      $(e.target).toggleClass("hideTrans");
     });
     $(example[1]).mouseleave(e => {
-      $(e.target).css({
-        "color": "#cccccc",
-        "background-color": "#cccccc"
-      });
+      $(e.target).toggleClass("hideTrans");
     });
   }
 }
 
 /* harmony default export */ const HideTranslation = (hideTranslation);
 ;// CONCATENATED MODULE: ./src/function/KeyDownFunctions.js
-function wordPronunce() {
-  // TODO: custom US or UK
+function wordPronunceUS() {
   // US
   $(".index_trump__3bTaM:last").click();
-  $(".Pronounce_audio__3xdMh:last").click(); // UK
-  // $(".index_trump__3bTaM:first").click()
-  // $(".Pronounce_audio__3xdMh:first").click()
+  $(".Pronounce_audio__3xdMh:last").click();
+}
+
+function wordPronunceUK() {
+  // UK
+  $(".index_trump__3bTaM:first").click();
+  $(".Pronounce_audio__3xdMh:first").click();
 }
 
 function examplePronunce() {
@@ -1160,17 +1373,34 @@ function collinsToggle() {
   }
 }
 
+function toggleExample() {
+  // hide and remove
+  if (localStorage.getItem("config-example-hide") === "隐藏并移除") {
+    $($(".index_left__2LkyW p")[1]).toggleClass("removeTrans");
+    $(".index_sentenceCn__XJD1u").toggleClass("removeTrans");
+  } // hide and reserved
+
+
+  if (localStorage.getItem("config-example-hide") === "隐藏并占位") {
+    $($(".index_left__2LkyW p")[1]).toggleClass("hideTrans");
+    $(".index_sentenceCn__XJD1u").toggleClass("hideTrans");
+  }
+}
+
 /* harmony default export */ const KeyDownFunctions = ({
-  "word-pronunce": wordPronunce,
+  "word-pronunce-uk": wordPronunceUK,
+  "word-pronunce-us": wordPronunceUS,
   "example-pronunce": examplePronunce,
   "example-pronunce-real-question": examplePronunceRealQuestion,
   "summary-toggle": summaryToggle,
-  "collins-toggle": collinsToggle
+  "collins-toggle": collinsToggle,
+  "toggle-example": toggleExample
 });
 ;// CONCATENATED MODULE: ./src/common/KeyDownObserver.js
 
 
 function executeFuntions(keyCode, type) {
+  if (localStorage.getItem("config-shortkey") === "false") return;
   let shortcutKeys = JSON.parse(localStorage.getItem("config-shortkey-keycode"));
   shortcutKeys.forEach(config => {
     if (config.id.indexOf(type) !== -1) {
@@ -1185,17 +1415,36 @@ function executeFuntions(keyCode, type) {
 }
 
 function keyDownObserver() {
-  $(document).keydown(e => {
-    executeFuntions(e.keyCode, "word-pronunce");
+  $(document).off("keydown"); // Unbind all events first
+
+  $(document).on("keydown", e => {
+    executeFuntions(e.keyCode, "word-pronunce-uk");
+    executeFuntions(e.keyCode, "word-pronunce-us");
     executeFuntions(e.keyCode, "example-pronunce");
     executeFuntions(e.keyCode, "example-pronunce-real-question");
     executeFuntions(e.keyCode, "summary-toggle");
     executeFuntions(e.keyCode, "collins-toggle");
+    executeFuntions(e.keyCode, "toggle-example");
   });
 }
 
 /* harmony default export */ const KeyDownObserver = (keyDownObserver);
+;// CONCATENATED MODULE: ./src/function/SlipPronunce.js
+function slipPronunce() {
+  if (localStorage.getItem("config-silp-pronunce") === "false") return;
+  let tds = $(".StudySummaryItem_studySummaryItem__k2ME0");
+  tds.each(index => {
+    let item = $(tds[index]);
+    let sound = item.find(".StudySummaryItem_sound__htCqt img");
+    item.on("mouseenter", () => {
+      sound.trigger("click");
+    });
+  });
+}
+
+/* harmony default export */ const SlipPronunce = (slipPronunce);
 ;// CONCATENATED MODULE: ./src/common/Observer.js
+
 
 
 
@@ -1226,7 +1475,15 @@ function Observer() {
         HideTranslation();
       }
 
-      if (currentState.indexOf("StudySummary") !== -1) SummaryTranslation.hideSummaryTranslation();
+      if (currentState.indexOf("StudySummary") !== -1) {
+        SummaryTranslation.hideSummaryTranslation();
+        SlipPronunce();
+      }
+
+      if (currentState.indexOf("study-page") !== -1) {
+        KeyDownObserver();
+      }
+
       commonConditions.forEach(condition => {
         if (currentState.indexOf(condition) !== -1) {
           FontToggle();
@@ -1255,7 +1512,6 @@ function Observer() {
 
     ToggleDarkMode();
     FocusMode();
-    KeyDownObserver();
   };
 
   const OuterObserver = new MutationObserver(OuterCallback);
