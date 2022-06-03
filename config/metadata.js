@@ -9,7 +9,7 @@ module.exports = {
   version: version,
   author: author,
   namespace: "https://greasyfork.org/zh-CN/users/605474",
-  icon: "https://cdn.jsdelivr.net/gh/ZiuChen/ZiuChen@main/avatar.jpg",
+  icon: "https://fastly.jsdelivr.net/gh/ZiuChen/ZiuChen@main/avatar.jpg",
   source: repository.url,
   supportURL: repository.url,
   match: ["https://www.shanbay.com/*", "https://web.shanbay.com/wordsweb/*"],
@@ -17,9 +17,10 @@ module.exports = {
     "https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js",
     "https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js"
   ],
-  updateURL: "https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
+  updateURL:
+    "https://fastly.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
   downloadURL:
-    "https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
+    "https://fastly.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
   grant: [],
   license: "MIT"
 }
