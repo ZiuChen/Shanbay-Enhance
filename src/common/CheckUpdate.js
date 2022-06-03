@@ -12,21 +12,21 @@ async function CheckUpdate() {
   sendRequest(GreasyUrl, (obj) => {
     return obj.querySelectorAll(".script-show-version>span")[1].textContent
   }).then((res) => {
-    let weightLastest = 0
+    let weightRemote = 0
     let weightNow = 0
     res
       .split(".")
       .reverse()
       .forEach((value, index) => {
-        weightLastest += (index + 1) * Math.pow(10, index + 1) * value
+        weightRemote += (index + 1) * Math.pow(100, index + 1) * value
       })
     Config.version
       .split(".")
       .reverse()
       .forEach((value, index) => {
-        weightNow += (index + 1) * Math.pow(10, index + 1) * value
+        weightNow += (index + 1) * Math.pow(100, index + 1) * value
       })
-    if (weightLastest > weightNow) {
+    if (weightRemote > weightNow) {
       log("need update")
       toastr.options = {
         timeOut: 999999999,
