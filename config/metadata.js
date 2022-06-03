@@ -1,4 +1,4 @@
-const { author, repository, version } = require("../package.json");
+const { author, repository, version } = require("../package.json")
 
 module.exports = {
   name: "扇贝单词增强",
@@ -15,12 +15,11 @@ module.exports = {
   match: ["https://www.shanbay.com/*", "https://web.shanbay.com/wordsweb/*"],
   require: [
     "https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js",
-    "https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js",
+    "https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js"
   ],
-  updateURL:
-    "https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
+  updateURL: "https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
   downloadURL:
     "https://cdn.jsdelivr.net/gh/ZiuChen/Shanbay-Enhance@main/publish/index.prod.user.js",
   grant: [],
-  license: "MIT",
-};
+  license: "MIT"
+}

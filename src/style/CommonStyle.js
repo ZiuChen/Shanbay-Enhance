@@ -126,6 +126,6 @@ button[class~=settingbutton] {
     background-color: ;
 }
 
-`;
+`
 
 export default style

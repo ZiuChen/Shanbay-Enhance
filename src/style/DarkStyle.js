@@ -325,6 +325,6 @@ const darkStyle = /* CSS */ `
         border-color: rgb(63, 69, 70);
         background-color: rgb(25, 26, 27);
     }
-`;
+`
 
 export default darkStyle
